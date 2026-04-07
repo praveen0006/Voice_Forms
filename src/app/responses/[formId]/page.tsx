@@ -21,6 +21,7 @@ export default function ResponsesDashboard() {
   const [respondents, setRespondents] = useState<RespondentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -79,6 +80,48 @@ export default function ResponsesDashboard() {
 
     loadData();
   }, [formId]);
+
+  const handleDeleteResponse = async (responseId: string) => {
+    if (!window.confirm('Are you sure you want to delete this response? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(responseId);
+    try {
+      // Find files to delete from storage optionally
+      const respondent = respondents.find(r => r.response.id === responseId);
+      if (respondent) {
+        const audioUrls = Object.values(respondent.answers)
+          .map(a => a.audio_url)
+          .filter(Boolean) as string[];
+        
+        // Convert full URLs to storage paths (e.g., formId/responseId/questionId.webm)
+        if (audioUrls.length > 0) {
+          const filesToRemove = audioUrls.map(url => {
+            const urlParts = url.split('/voice-answers/');
+            return urlParts.length > 1 ? urlParts[1] : null;
+          }).filter(Boolean) as string[];
+
+          if (filesToRemove.length > 0) {
+            await supabase.storage.from('voice-answers').remove(filesToRemove);
+          }
+        }
+      }
+
+      // Delete from DB (cascades to answers)
+      const { error } = await supabase.from('responses').delete().eq('id', responseId);
+      
+      if (error) throw error;
+      
+      // Update UI
+      setRespondents(prev => prev.filter(r => r.response.id !== responseId));
+    } catch (err) {
+      console.error('Error deleting response:', err);
+      alert('Failed to delete response. Please try again.');
+    } finally {
+      setIsDeleting(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -144,13 +187,48 @@ export default function ResponsesDashboard() {
           {respondents.map((respondent, index) => (
             <div key={respondent.response.id} className="glass-card p-0 overflow-hidden animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
               {/* Respondent Header */}
-              <div style={{ background: 'var(--bg-glass-strong)', padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
-                  Respondent #{respondents.length - index}
-                </h3>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {new Date(respondent.response.created_at).toLocaleString()}
-                </span>
+              <div style={{ background: 'var(--bg-glass-strong)', padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
+                    Respondent #{respondents.length - index}
+                  </h3>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    {new Date(respondent.response.created_at).toLocaleString()}
+                  </span>
+                </div>
+                
+                <button
+                  onClick={() => handleDeleteResponse(respondent.response.id)}
+                  disabled={isDeleting === respondent.response.id}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: isDeleting === respondent.response.id ? 'not-allowed' : 'pointer',
+                    color: 'var(--accent-pink)',
+                    opacity: isDeleting === respondent.response.id ? 0.5 : 0.8,
+                    padding: '8px',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'opacity 0.2s'
+                  }}
+                  title="Delete Response"
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = isDeleting === respondent.response.id ? '0.5' : '0.8'}
+                >
+                  {isDeleting === respondent.response.id ? (
+                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  )}
+                </button>
               </div>
 
               {/* Answers */}
@@ -170,7 +248,7 @@ export default function ResponsesDashboard() {
                       </div>
                       
                       <div className="pl-6" style={{ borderLeft: '2px solid var(--border-subtle)' }}>
-                        {!answer ? (
+                        {!answer || (!answer.audio_url && !answer.text) ? (
                           <p style={{ fontStyle: 'italic', color: 'var(--text-muted)', fontSize: '0.9rem' }}>No answer provided.</p>
                         ) : (
                           <div className="flex flex-col gap-3 mt-3">

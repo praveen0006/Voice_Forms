@@ -120,7 +120,8 @@ export default function RespondFormPage() {
       if (error) throw error;
 
       // Upload and save each answer
-      for (const [questionId, answer] of answers) {
+      const answersToInsert = [];
+      for (const [questionId, answer] of Array.from(answers.entries())) {
         let audioUrl = null;
 
         if (answer.audioBlob) {
@@ -128,7 +129,7 @@ export default function RespondFormPage() {
           audioUrl = await uploadAudio('voice-answers', answer.audioBlob, fileName);
         }
 
-        await supabase.from('answers').insert({
+        answersToInsert.push({
           response_id: response.id,
           question_id: questionId,
           audio_url: audioUrl,
@@ -136,10 +137,15 @@ export default function RespondFormPage() {
         });
       }
 
+      if (answersToInsert.length > 0) {
+        const { error: insertError } = await supabase.from('answers').insert(answersToInsert);
+        if (insertError) throw insertError;
+      }
+
       setIsSubmitted(true);
     } catch (err) {
       console.error('Submit error:', err);
-      alert('Failed to submit. Please try again.');
+      alert('Failed to submit: ' + (err instanceof Error ? err.message : JSON.stringify(err)));
     } finally {
       setIsSubmitting(false);
     }
