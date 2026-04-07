@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from 'next/link';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-mesh min-h-screen">
+      <body className="bg-mesh min-h-screen flex flex-col">
         {/* Top nav bar */}
         <nav
           style={{
@@ -27,7 +28,7 @@ export default function RootLayout({
           }}
         >
           <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
               {/* Logo */}
               <div style={{
                 width: '36px',
@@ -46,14 +47,31 @@ export default function RootLayout({
               <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 Voice<span className="gradient-text">Form</span>
               </span>
-            </a>
+            </Link>
           </div>
         </nav>
 
         {/* Main content */}
-        <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px' }}>
+        <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', flex: '1 0 auto' }}>
           {children}
         </main>
+        
+        {/* Footer */}
+        <footer style={{
+          textAlign: 'center',
+          padding: '24px',
+          marginTop: 'auto',
+          borderTop: '1px solid var(--border-subtle)',
+          color: 'var(--text-muted)',
+          fontSize: '0.9rem',
+        }}>
+          <p>
+            © {new Date().getFullYear()} VoiceForm. All rights reserved. •{' '}
+            <Link href="/privacy" style={{ color: 'var(--text-secondary)', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+              Privacy & Terms
+            </Link>
+          </p>
+        </footer>
       </body>
     </html>
   );

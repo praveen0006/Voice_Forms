@@ -26,7 +26,7 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        try { audioCtxRef.current.close().catch(() => {}); } catch(e) {}
+        try { audioCtxRef.current.close().catch(() => {}); } catch {}
       }
     };
   }, []);

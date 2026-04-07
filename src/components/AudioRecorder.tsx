@@ -35,7 +35,7 @@ export default function AudioRecorder({
       if (timerRef.current) clearInterval(timerRef.current);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        try { audioCtxRef.current.close() } catch (e) {}
+        try { audioCtxRef.current.close() } catch {}
       }
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
@@ -144,7 +144,7 @@ export default function AudioRecorder({
               setIsRecording(false);
               if (animationRef.current) cancelAnimationFrame(animationRef.current);
               if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-                try { audioCtxRef.current.close().catch(() => {}) } catch (e) {}
+                try { audioCtxRef.current.close().catch(() => {}) } catch {}
               }
             }
             if (timerRef.current) {
@@ -175,7 +175,7 @@ export default function AudioRecorder({
         cancelAnimationFrame(animationRef.current);
       }
       if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        try { audioCtxRef.current.close() } catch (e) {}
+        try { audioCtxRef.current.close() } catch {}
       }
     }
   }, []);

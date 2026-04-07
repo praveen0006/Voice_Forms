@@ -217,10 +217,6 @@ export default function RespondFormPage() {
 
   const currentQ = questions[currentQuestion];
   const currentAnswer = answers.get(currentQ?.id);
-  const hasAnswer = currentAnswer && (currentAnswer.audioBlob || currentAnswer.text.trim());
-  const allAnswered = [...answers.values()].every(
-    (a) => a.audioBlob || a.text.trim()
-  );
   const isLastQuestion = currentQuestion === questions.length - 1;
 
   return (

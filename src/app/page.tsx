@@ -23,7 +23,7 @@ export default function Home() {
     if (saved) {
       try {
         setRecentForms(JSON.parse(saved));
-      } catch (e) {}
+      } catch {}
     }
   }, []);
 
@@ -171,6 +171,32 @@ export default function Home() {
               <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{f.desc}</div>
             </div>
           ))}
+        </div>
+
+        {/* Data Security Info */}
+        <div className="mt-12 animate-fade-in text-left p-6 glass-card" style={{ animationDelay: '0.4s' }}>
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            What happens to your data?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-1">💾</div>
+              <div>
+                <strong style={{ color: 'var(--text-secondary)' }}>Storage:</strong>
+                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Audio and form data securely saved in a scalable cloud Postgres DB.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="mt-1">🤖</div>
+              <div>
+                <strong style={{ color: 'var(--text-secondary)' }}>Processing:</strong>
+                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>No hidden AI training or processing on your voice.</p>
+              </div>
+            </div>
+          </div>
         </div>
         
         {/* Recent Forms Section */}
