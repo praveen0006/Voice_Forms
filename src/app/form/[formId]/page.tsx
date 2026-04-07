@@ -27,6 +27,7 @@ export default function RespondFormPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isCurrentlyRecording, setIsCurrentlyRecording] = useState(false);
 
   // Load form and questions
   useEffect(() => {
@@ -328,6 +329,7 @@ export default function RespondFormPage() {
               <AudioRecorder
                 maxDuration={currentQ.max_duration || 300}
                 onRecordingComplete={(blob) => handleAnswerRecording(currentQ.id, blob)}
+                onRecordingStateChange={setIsCurrentlyRecording}
               />
             )}
           </div>
@@ -360,14 +362,14 @@ export default function RespondFormPage() {
       <div className="flex items-center gap-3">
         <button
           onClick={goToPrev}
-          disabled={currentQuestion === 0}
+          disabled={currentQuestion === 0 || isCurrentlyRecording}
           className="btn-secondary flex-1"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '6px',
-            opacity: currentQuestion === 0 ? 0.5 : 1,
+            opacity: currentQuestion === 0 || isCurrentlyRecording ? 0.5 : 1,
           }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -379,11 +381,13 @@ export default function RespondFormPage() {
         {isLastQuestion ? (
           <button
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isCurrentlyRecording}
             className="btn-primary flex-1"
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: isCurrentlyRecording ? 0.5 : 1 }}
           >
-            {isSubmitting ? (
+            {isCurrentlyRecording ? (
+              "Stop Recording to Submit"
+            ) : isSubmitting ? (
               <>
                 <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
@@ -403,13 +407,16 @@ export default function RespondFormPage() {
         ) : (
           <button
             onClick={goToNext}
+            disabled={isCurrentlyRecording}
             className="btn-primary flex-1"
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: isCurrentlyRecording ? 0.5 : 1 }}
           >
-            Next
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            {isCurrentlyRecording ? 'Stop Recording to Continue' : 'Next'}
+            {!isCurrentlyRecording && (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            )}
           </button>
         )}
       </div>
@@ -422,7 +429,10 @@ export default function RespondFormPage() {
           return (
             <button
               key={q.id}
-              onClick={() => setCurrentQuestion(i)}
+              onClick={() => {
+                if (!isCurrentlyRecording) setCurrentQuestion(i);
+              }}
+              disabled={isCurrentlyRecording}
               style={{
                 width: i === currentQuestion ? '24px' : '8px',
                 height: '8px',

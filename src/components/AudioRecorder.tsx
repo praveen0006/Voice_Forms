@@ -6,12 +6,14 @@ interface AudioRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
   maxDuration?: number; // seconds
   disabled?: boolean;
+  onRecordingStateChange?: (isRecording: boolean) => void;
 }
 
 export default function AudioRecorder({
   onRecordingComplete,
   maxDuration = 300, // Increased to 5 minutes
   disabled = false,
+  onRecordingStateChange,
 }: AudioRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -113,6 +115,7 @@ export default function AudioRecorder({
       mediaRecorder.start(100); // collect data every 100ms
       isRecordingRef.current = true;
       setIsRecording(true);
+      onRecordingStateChange?.(true);
       setDuration(0);
 
       // Web Audio API for visualization
@@ -138,10 +141,11 @@ export default function AudioRecorder({
         setDuration(prev => {
           if (prev + 1 >= maxDuration) {
             // Because stopRecording is a useCallback without maxDuration, this is safe to call
-            if (mediaRecorderRef.current && isRecordingRef.current) {
+              if (mediaRecorderRef.current && isRecordingRef.current) {
               mediaRecorderRef.current.stop();
               isRecordingRef.current = false;
               setIsRecording(false);
+              onRecordingStateChange?.(false);
               if (animationRef.current) cancelAnimationFrame(animationRef.current);
               if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
                 try { audioCtxRef.current.close().catch(() => {}) } catch {}
@@ -166,6 +170,7 @@ export default function AudioRecorder({
       mediaRecorderRef.current.stop();
       isRecordingRef.current = false;
       setIsRecording(false);
+      onRecordingStateChange?.(false);
       
       if (timerRef.current) {
         clearInterval(timerRef.current);
