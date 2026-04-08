@@ -107,9 +107,25 @@ export default function AudioRecorder({
 
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        
+        isRecordingRef.current = false;
+        setIsRecording(false);
+        onRecordingStateChange?.(false);
+        
         onRecordingComplete(blob);
         stream.getTracks().forEach(track => track.stop());
         streamRef.current = null;
+
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+          try { audioCtxRef.current.close().catch(() => {}) } catch {}
+        }
       };
 
       mediaRecorder.start(100); // collect data every 100ms
@@ -143,13 +159,6 @@ export default function AudioRecorder({
             // Because stopRecording is a useCallback without maxDuration, this is safe to call
               if (mediaRecorderRef.current && isRecordingRef.current) {
               mediaRecorderRef.current.stop();
-              isRecordingRef.current = false;
-              setIsRecording(false);
-              onRecordingStateChange?.(false);
-              if (animationRef.current) cancelAnimationFrame(animationRef.current);
-              if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-                try { audioCtxRef.current.close().catch(() => {}) } catch {}
-              }
             }
             if (timerRef.current) {
               clearInterval(timerRef.current);
@@ -168,20 +177,6 @@ export default function AudioRecorder({
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecordingRef.current) {
       mediaRecorderRef.current.stop();
-      isRecordingRef.current = false;
-      setIsRecording(false);
-      onRecordingStateChange?.(false);
-      
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        try { audioCtxRef.current.close() } catch {}
-      }
     }
   }, [onRecordingStateChange]);
 

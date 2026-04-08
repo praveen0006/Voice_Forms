@@ -15,6 +15,8 @@ CREATE TABLE questions (
   audio_url TEXT,
   text TEXT,
   order_index INTEGER NOT NULL DEFAULT 0,
+  is_required BOOLEAN NOT NULL DEFAULT true,
+  max_duration INTEGER,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
@@ -79,3 +81,8 @@ CREATE POLICY "Allow public reads from voice-answers"
 ON storage.objects FOR SELECT
 TO anon
 USING (bucket_id = 'voice-answers');
+
+-- 8. Updates for existing databases
+-- Run this if you already have the tables created:
+-- ALTER TABLE questions ADD COLUMN IF NOT EXISTS is_required BOOLEAN NOT NULL DEFAULT true;
+-- ALTER TABLE questions ADD COLUMN IF NOT EXISTS max_duration INTEGER;

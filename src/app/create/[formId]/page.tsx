@@ -56,6 +56,7 @@ export default function CreateFormPage() {
             audioUrl: q.audio_url,
             text: q.text || '',
             order_index: q.order_index,
+            is_required: q.is_required ?? true,
             isRecording: false,
             isUploading: false,
             max_duration: q.max_duration || 300,
@@ -78,6 +79,7 @@ export default function CreateFormPage() {
         audioUrl: null,
         text: '',
         order_index: prev.length,
+        is_required: true,
         isRecording: false,
         isUploading: false,
         max_duration: 300,
@@ -165,7 +167,9 @@ export default function CreateFormPage() {
 
     try {
       // Update form title
-      await supabase.from('forms').update({ title }).eq('id', formId);
+      const validatedTitle = title.trim() || 'Untitled Form';
+      await supabase.from('forms').update({ title: validatedTitle }).eq('id', formId);
+      setTitle(validatedTitle);
 
       // Delete existing questions (will re-insert)
       await supabase.from('questions').delete().eq('form_id', formId);
@@ -192,8 +196,9 @@ export default function CreateFormPage() {
         await supabase.from('questions').insert({
           form_id: formId,
           audio_url: audioUrl,
-          text: q.text || null,
+          text: q.text ? q.text.trim() : null,
           order_index: q.order_index,
+          is_required: q.is_required,
           max_duration: q.max_duration || 300,
         });
       }
@@ -274,6 +279,20 @@ export default function CreateFormPage() {
                   <option value={180}>3m Limit</option>
                   <option value={300}>5m Limit</option>
                 </select>
+
+                {/* Required Toggle */}
+                <label className="flex items-center gap-2 cursor-pointer select-none" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', background: 'var(--bg-glass-strong)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <input
+                    type="checkbox"
+                    checked={q.is_required}
+                    onChange={(e) => {
+                      setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
+                      setIsSaved(false);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <span>Required</span>
+                </label>
 
                 {/* Upload status */}
                 {q.isUploading && (

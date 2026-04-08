@@ -12,6 +12,7 @@ export interface Question {
   audio_url: string | null;
   text: string | null;
   order_index: number;
+  is_required: boolean;
   max_duration?: number;
   created_at: string;
 }
@@ -38,6 +39,7 @@ export interface QuestionDraft {
   audioUrl: string | null; // object URL for preview
   text: string;
   order_index: number;
+  is_required: boolean;
   isRecording: boolean;
   isUploading: boolean;
   max_duration?: number;

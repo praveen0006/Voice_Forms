@@ -108,10 +108,12 @@ export default function RespondFormPage() {
 
   // Submit form
   const handleSubmit = async () => {
-    // Validation: make every question mandatory
+    // Validation: make every question mandatory by default, except if marked is_required=false
     const unansweredQs = [];
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
+      if (q.is_required === false) continue; // Skip validation for optional questions
+
       const ans = answers.get(q.id);
       if (!ans || (!ans.audioBlob && (!ans.text || !ans.text.trim()))) {
         unansweredQs.push(i + 1);
@@ -138,6 +140,14 @@ export default function RespondFormPage() {
       // Upload and save each answer
       const answersToInsert = [];
       for (const [questionId, answer] of Array.from(answers.entries())) {
+        const q = questions.find(question => question.id === questionId);
+        const hasContent = answer.audioBlob || (answer.text && answer.text.trim());
+        
+        // If it's optional and has no content, skip record creation entirely
+        if (!hasContent && q && !q.is_required) {
+          continue;
+        }
+
         let audioUrl = null;
 
         if (answer.audioBlob) {
@@ -149,7 +159,7 @@ export default function RespondFormPage() {
           response_id: response.id,
           question_id: questionId,
           audio_url: audioUrl,
-          text: answer.text || null,
+          text: answer.text ? answer.text.trim() : null,
         });
       }
 
@@ -303,6 +313,11 @@ export default function RespondFormPage() {
               }}
             >
               Question {currentQuestion + 1}
+              {!currentQ.is_required && (
+                <span style={{ marginLeft: '8px', color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.7rem' }}>
+                  (Optional)
+                </span>
+              )}
             </span>
           </div>
 
@@ -453,6 +468,18 @@ export default function RespondFormPage() {
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             )}
+          </button>
+        )}
+
+        {/* Skip button for optional questions */}
+        {!isLastQuestion && currentQ && !currentQ.is_required && currentAnswer && !currentAnswer.audioBlob && !currentAnswer.text.trim() && (
+          <button
+            onClick={goToNext}
+            disabled={isCurrentlyRecording}
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: '0.85rem', opacity: isCurrentlyRecording ? 0.5 : 1 }}
+          >
+            Skip
           </button>
         )}
       </div>
