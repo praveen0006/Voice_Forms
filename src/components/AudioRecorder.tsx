@@ -163,7 +163,7 @@ export default function AudioRecorder({
     } catch {
       setPermissionDenied(true);
     }
-  }, [maxDuration, onRecordingComplete, drawWaveform]);
+  }, [maxDuration, onRecordingComplete, drawWaveform, onRecordingStateChange]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecordingRef.current) {
@@ -183,7 +183,7 @@ export default function AudioRecorder({
         try { audioCtxRef.current.close() } catch {}
       }
     }
-  }, []);
+  }, [onRecordingStateChange]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);

@@ -147,6 +147,20 @@ export default function CreateFormPage() {
       return;
     }
 
+    // Validate that no question is completely empty
+    const emptyQs = [];
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      if (!q.audioUrl && !q.audioBlob && (!q.text || !q.text.trim())) {
+        emptyQs.push(i + 1);
+      }
+    }
+
+    if (emptyQs.length > 0) {
+      alert(`Please provide text or an audio recording for all questions before saving.\n\nMissing content for questions: ${emptyQs.join(', ')}`);
+      return;
+    }
+
     setIsSaving(true);
 
     try {

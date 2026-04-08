@@ -108,6 +108,21 @@ export default function RespondFormPage() {
 
   // Submit form
   const handleSubmit = async () => {
+    // Validation: make every question mandatory
+    const unansweredQs = [];
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const ans = answers.get(q.id);
+      if (!ans || (!ans.audioBlob && (!ans.text || !ans.text.trim()))) {
+        unansweredQs.push(i + 1);
+      }
+    }
+
+    if (unansweredQs.length > 0) {
+      alert(`Please complete all questions before submitting.\n\nMissing questions: ${unansweredQs.join(', ')}`);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -211,6 +226,27 @@ export default function RespondFormPage() {
           <p style={{ color: 'var(--text-muted)' }}>
             Thank you for completing this VoiceForm.
           </p>
+          
+          {/* NexEraEco link */}
+          <div className="mt-8 pt-6" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
+              Want to see what else we do?
+            </p>
+            <a 
+              href="https://nexeraeco.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-secondary w-full"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textDecoration: 'none' }}
+            >
+              Explore NexEraEco
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -450,6 +486,43 @@ export default function RespondFormPage() {
             />
           );
         })}
+      </div>
+
+      {/* Powered By NexEraEco Footer */}
+      <div className="text-center mt-12 mb-4 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        <a 
+          href="https://nexeraeco.vercel.app/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ 
+            fontSize: '0.85rem', 
+            color: 'var(--text-muted)', 
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'var(--bg-glass)',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            border: '1px solid var(--border-subtle)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'var(--bg-glass-strong)';
+            e.currentTarget.style.borderColor = 'var(--accent-violet)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'var(--bg-glass)';
+            e.currentTarget.style.borderColor = 'var(--border-subtle)';
+          }}
+        >
+          <span>Brought to you by <strong style={{ color: 'var(--text-primary)' }}>NexEraEco</strong></span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+        </a>
       </div>
 
       <div style={{ height: '60px' }} />
