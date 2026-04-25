@@ -5,6 +5,9 @@
 CREATE TABLE forms (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL DEFAULT 'Untitled Form',
+  header_video_url TEXT,
+  header_image_url TEXT,
+  notification_email TEXT,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
@@ -16,7 +19,7 @@ CREATE TABLE questions (
   text TEXT,
   order_index INTEGER NOT NULL DEFAULT 0,
   is_required BOOLEAN NOT NULL DEFAULT true,
-  max_duration INTEGER,
+  max_duration INTEGER DEFAULT 300,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 

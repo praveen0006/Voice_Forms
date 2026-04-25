@@ -90,6 +90,12 @@ export default function AudioRecorder({
   }, []);
 
   const startRecording = useCallback(async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setPermissionDenied(true);
+      console.error('Microphone API not available. This might be because the site is not using HTTPS.');
+      return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
@@ -178,7 +184,7 @@ export default function AudioRecorder({
     if (mediaRecorderRef.current && isRecordingRef.current) {
       mediaRecorderRef.current.stop();
     }
-  }, [onRecordingStateChange]);
+  }, []);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -224,9 +230,10 @@ export default function AudioRecorder({
 
       {/* Permission Error */}
       {permissionDenied && (
-        <p style={{ color: 'var(--accent-red)', fontSize: '0.8rem', textAlign: 'center' }}>
-          Microphone access denied. Please allow microphone access in your browser settings.
-        </p>
+        <div style={{ color: 'var(--accent-red)', fontSize: '0.8rem', textAlign: 'center', background: 'rgba(239, 68, 68, 0.1)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.2)', maxWidth: '280px' }}>
+          <p style={{ fontWeight: 600, marginBottom: '4px' }}>Microphone Access Failed</p>
+          <p>Please check site permissions. Note: Voice recording requires a <strong>secure (HTTPS)</strong> connection on mobile.</p>
+        </div>
       )}
     </div>
   );

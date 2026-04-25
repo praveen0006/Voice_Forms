@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { supabase, uploadAudio } from '@/lib/supabase';
+import { supabase, uploadAudio, uploadFile } from '@/lib/supabase';
 import { QuestionDraft } from '@/lib/types';
 import AudioRecorder from '@/components/AudioRecorder';
 import AudioPlayer from '@/components/AudioPlayer';
@@ -139,11 +139,10 @@ export default function CreateFormPage() {
   const handleMediaUpload = async (file: File, type: 'video' | 'image') => {
     setIsUploadingMedia(true);
     try {
-      const bucket = type === 'video' ? 'voice-questions' : 'voice-questions'; // Use generic bucket or create new one
+      const bucket = type === 'video' ? 'voice-questions' : 'voice-questions'; 
       const extension = file.name.split('.').pop();
       const fileName = `headers/${formId}/${type}_${Date.now()}.${extension}`;
       
-      const { uploadFile } = await import('@/lib/supabase');
       const url = await uploadFile(bucket, file, fileName);
       
       if (type === 'video') setHeaderVideoUrl(url);
@@ -204,10 +203,22 @@ export default function CreateFormPage() {
       }).eq('id', formId);
       setTitle(validatedTitle);
 
-      // Delete existing questions (will re-insert)
-      await supabase.from('questions').delete().eq('form_id', formId);
+      // Get existing question IDs from DB to figure out what to delete vs update
+      const { data: existingQs } = await supabase
+        .from('questions')
+        .select('id')
+        .eq('form_id', formId);
+      
+      const existingIds = (existingQs || []).map(q => q.id);
+      const currentIds = questions.map(q => q.id);
+      
+      // Delete questions that are no longer in the list
+      const idsToDelete = existingIds.filter(id => !currentIds.includes(id));
+      if (idsToDelete.length > 0) {
+        await supabase.from('questions').delete().in('id', idsToDelete);
+      }
 
-      // Upload audio and save questions
+      // Process questions (update existing or insert new)
       for (const q of questions) {
         let audioUrl = q.audioUrl;
 
@@ -221,19 +232,26 @@ export default function CreateFormPage() {
           audioUrl = await uploadAudio('voice-questions', q.audioBlob, fileName);
 
           setQuestions((prev) =>
-            prev.map((pq) => (pq.id === q.id ? { ...pq, isUploading: false, audioUrl } : pq))
+            prev.map((pq) => (pq.id === q.id ? { ...pq, isUploading: false, audioUrl, audioBlob: null } : pq))
           );
         }
 
-        // Insert question
-        await supabase.from('questions').insert({
+        const questionData = {
           form_id: formId,
           audio_url: audioUrl,
           text: q.text ? q.text.trim() : null,
           order_index: q.order_index,
           is_required: q.is_required,
           max_duration: q.max_duration || 300,
-        });
+        };
+
+        if (existingIds.includes(q.id)) {
+          // Update existing
+          await supabase.from('questions').update(questionData).eq('id', q.id);
+        } else {
+          // Insert new
+          await supabase.from('questions').insert(questionData);
+        }
       }
 
       const url = `${window.location.origin}/form/${formId}`;
@@ -334,7 +352,7 @@ export default function CreateFormPage() {
             </label>
             {headerImageUrl ? (
               <div className="relative rounded-lg overflow-hidden border border-subtle aspect-video mb-3">
-                <img src={headerImageUrl} className="w-full h-full object-cover" alt="Header" />
+                <Image src={headerImageUrl} fill className="object-cover" alt="Header" />
                 <button 
                   onClick={() => { setHeaderImageUrl(null); setIsSaved(false); }}
                   className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-full shadow-lg"

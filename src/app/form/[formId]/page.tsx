@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { supabase, uploadAudio } from '@/lib/supabase';
 import { Question } from '@/lib/types';
@@ -328,11 +329,12 @@ export default function RespondFormPage() {
                     Reference image for this form:
                   </p>
                 )}
-                <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-subtle)' }}>
-                  <img 
+                <div className="rounded-xl overflow-hidden border relative" style={{ borderColor: 'var(--border-subtle)', aspectRatio: '16/9' }}>
+                  <Image 
                     src={headerImageUrl} 
                     alt="Form Reference" 
-                    className="w-full h-auto block"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               </div>

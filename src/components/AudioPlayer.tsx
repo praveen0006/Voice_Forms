@@ -198,7 +198,12 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
       {/* Progress, Form & Time */}
       <div className="flex-1 flex flex-col gap-1 w-full min-w-0">
         <div style={{ height: '30px', width: '100%', opacity: isLoaded ? 1 : 0.4 }}>
-          <canvas ref={canvasRef} width={200} height={30} style={{ width: '100%', height: '100%' }} />
+          <canvas 
+            ref={canvasRef} 
+            width={400} 
+            height={60} 
+            style={{ width: '100%', height: '100%', display: 'block' }} 
+          />
         </div>
         
         <input
