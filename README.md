@@ -4,7 +4,9 @@ VoiceForm is an audio-first form builder designed to capture responses natively 
 
 ## ✨ Features
 - **Audio-First Flow:** Record questions with your voice and accept audio answers.
+- **Header Context Media:** Add demonstration videos and reference images to your forms to provide context to respondents.
 - **Dynamic Real-Time Waveforms:** Built-in WebAudio API canvas visualizer that reacts to your voice.
+- **Smart Validation:** Optional vs. Required questions with real-time validation.
 - **Per-Question Time Limits:** Control answer lengths (e.g., 30s vs 5m) per individual question.
 - **Frictionless Experience:** All forms are strictly URL-based. No user logic, authentication walls, or friction—just record and share.
 - **Automated Email Notifications:** Supabase Database Webhooks wired to Deno Edge Functions dispatch instant email alerts on new submissions.
@@ -15,7 +17,7 @@ VoiceForm is an audio-first form builder designed to capture responses natively 
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS v4
 - **Database Backend:** Supabase Postgres
-- **Storage:** Supabase Storage (WebM Audio)
+- **Storage:** Supabase Storage (WebM Audio, MP4, JPEG)
 - **Edge Functions:** Deno runtime on Supabase (Resend Email API)
 
 ## 🚀 Getting Started
@@ -38,7 +40,20 @@ VoiceForm is an audio-first form builder designed to capture responses natively 
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
 
-4. **Run the development server:**
+4. **Prepare the Database:**
+   Run the following SQL in your Supabase SQL Editor:
+   ```sql
+   -- Core Tables
+   -- (Run contents of supabase_migration.sql)
+
+   -- Latest Feature Updates (Dynamic Media & Validation)
+   ALTER TABLE forms ADD COLUMN IF NOT EXISTS header_video_url TEXT;
+   ALTER TABLE forms ADD COLUMN IF NOT EXISTS header_image_url TEXT;
+   ALTER TABLE questions ADD COLUMN IF NOT EXISTS is_required BOOLEAN NOT NULL DEFAULT true;
+   ALTER TABLE questions ADD COLUMN IF NOT EXISTS max_duration INTEGER DEFAULT 300;
+   ```
+
+5. **Run the development server:**
    ```bash
    npm run dev
    ```

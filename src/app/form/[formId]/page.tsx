@@ -20,6 +20,8 @@ export default function RespondFormPage() {
   const formId = params.formId as string;
 
   const [formTitle, setFormTitle] = useState('');
+  const [headerVideoUrl, setHeaderVideoUrl] = useState<string | null>(null);
+  const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Map<string, AnswerDraft>>(new Map());
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ export default function RespondFormPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isCurrentlyRecording, setIsCurrentlyRecording] = useState(false);
-
+ 
   // Load form and questions
   useEffect(() => {
     async function loadForm() {
@@ -37,14 +39,16 @@ export default function RespondFormPage() {
         .select('*')
         .eq('id', formId)
         .single();
-
+ 
       if (error || !form) {
         setNotFound(true);
         setLoading(false);
         return;
       }
-
+ 
       setFormTitle(form.title);
+      setHeaderVideoUrl(form.header_video_url);
+      setHeaderImageUrl(form.header_image_url);
 
       const { data: qs } = await supabase
         .from('questions')
@@ -297,6 +301,45 @@ export default function RespondFormPage() {
           />
         </div>
       </div>
+
+      {/* Dynamic Header Media Section */}
+      {(headerVideoUrl || headerImageUrl) && currentQuestion === 0 && (
+        <div className="glass-card mb-8 overflow-hidden animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <div className="p-4 border-b" style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-glass)' }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.2rem' }}>📽️</span> Form Context
+            </h2>
+          </div>
+          <div className="p-2 flex flex-col gap-4">
+            {headerVideoUrl && (
+              <div className="relative rounded-xl overflow-hidden shadow-2xl" style={{ background: '#000', aspectRatio: '16/9' }}>
+                <video 
+                  src={headerVideoUrl} 
+                  controls 
+                  className="w-full h-full object-contain"
+                  poster={headerImageUrl || undefined}
+                />
+              </div>
+            )}
+            {headerImageUrl && (
+              <div className="px-2 pb-2">
+                {!headerVideoUrl && (
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '12px' }}>
+                    Reference image for this form:
+                  </p>
+                )}
+                <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <img 
+                    src={headerImageUrl} 
+                    alt="Form Reference" 
+                    className="w-full h-auto block"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Question Card */}
       {currentQ && (

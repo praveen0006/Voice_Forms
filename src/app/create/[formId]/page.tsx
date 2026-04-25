@@ -17,6 +17,9 @@ export default function CreateFormPage() {
   const formId = params.formId as string;
 
   const [title, setTitle] = useState('');
+  const [headerVideoUrl, setHeaderVideoUrl] = useState<string | null>(null);
+  const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
   const [questions, setQuestions] = useState<QuestionDraft[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -40,6 +43,8 @@ export default function CreateFormPage() {
       }
 
       setTitle(data.title);
+      setHeaderVideoUrl(data.header_video_url);
+      setHeaderImageUrl(data.header_image_url);
 
       // Load existing questions
       const { data: existingQuestions } = await supabase
@@ -130,6 +135,29 @@ export default function CreateFormPage() {
     setIsSaved(false);
   }, []);
 
+  // Handle header media upload
+  const handleMediaUpload = async (file: File, type: 'video' | 'image') => {
+    setIsUploadingMedia(true);
+    try {
+      const bucket = type === 'video' ? 'voice-questions' : 'voice-questions'; // Use generic bucket or create new one
+      const extension = file.name.split('.').pop();
+      const fileName = `headers/${formId}/${type}_${Date.now()}.${extension}`;
+      
+      const { uploadFile } = await import('@/lib/supabase');
+      const url = await uploadFile(bucket, file, fileName);
+      
+      if (type === 'video') setHeaderVideoUrl(url);
+      else setHeaderImageUrl(url);
+      
+      setIsSaved(false);
+    } catch (err) {
+      console.error('Media upload error:', err);
+      alert('Failed to upload media. Please try again.');
+    } finally {
+      setIsUploadingMedia(false);
+    }
+  };
+
   // Move question up/down
   const moveQuestion = useCallback((index: number, direction: 'up' | 'down') => {
     setQuestions((prev) => {
@@ -141,6 +169,7 @@ export default function CreateFormPage() {
     });
     setIsSaved(false);
   }, []);
+
 
   // Save form
   const saveForm = async () => {
@@ -166,9 +195,13 @@ export default function CreateFormPage() {
     setIsSaving(true);
 
     try {
-      // Update form title
+      // Update form title and media
       const validatedTitle = title.trim() || 'Untitled Form';
-      await supabase.from('forms').update({ title: validatedTitle }).eq('id', formId);
+      await supabase.from('forms').update({ 
+        title: validatedTitle,
+        header_video_url: headerVideoUrl,
+        header_image_url: headerImageUrl
+      }).eq('id', formId);
       setTitle(validatedTitle);
 
       // Delete existing questions (will re-insert)
@@ -244,6 +277,99 @@ export default function CreateFormPage() {
           className="input-field"
           style={{ fontSize: '1.5rem', fontWeight: 700, padding: '16px 20px' }}
         />
+      </div>
+
+      {/* Form Header Media Settings */}
+      <div className="glass-card p-6 mb-8 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '1.2rem' }}>📽️</span> Header Context (Optional)
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Video Upload */}
+          <div>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', display: 'block' }}>
+              Introduction Video
+            </label>
+            {headerVideoUrl ? (
+              <div className="relative rounded-lg overflow-hidden border border-subtle bg-black aspect-video mb-3 shadow-inner">
+                <video src={headerVideoUrl} controls className="w-full h-full" />
+                <button 
+                  onClick={() => { setHeaderVideoUrl(null); setIsSaved(false); }}
+                  className="absolute top-2 right-2 bg-red-500/90 hover:bg-red-600 text-white p-2 rounded-full shadow-xl transition-all hover:scale-110 active:scale-95"
+                  title="Remove Video"
+                  style={{ border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            ) : (
+              <div className="relative">
+                <input 
+                  type="file" 
+                  accept="video/*" 
+                  onChange={(e) => e.target.files?.[0] && handleMediaUpload(e.target.files[0], 'video')}
+                  className="hidden" 
+                  id="header-video-upload"
+                  disabled={isUploadingMedia}
+                />
+                <label 
+                  htmlFor="header-video-upload"
+                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all hover:bg-glass"
+                  style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-glass)' }}
+                >
+                  <span style={{ fontSize: '1.5rem', marginBottom: '8px' }}>🎬</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    {isUploadingMedia ? 'Uploading...' : 'Upload Video'}
+                  </span>
+                </label>
+              </div>
+            )}
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px', display: 'block' }}>
+              Reference Image
+            </label>
+            {headerImageUrl ? (
+              <div className="relative rounded-lg overflow-hidden border border-subtle aspect-video mb-3">
+                <img src={headerImageUrl} className="w-full h-full object-cover" alt="Header" />
+                <button 
+                  onClick={() => { setHeaderImageUrl(null); setIsSaved(false); }}
+                  className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-full shadow-lg"
+                  title="Remove Image"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            ) : (
+              <div className="relative">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={(e) => e.target.files?.[0] && handleMediaUpload(e.target.files[0], 'image')}
+                  className="hidden" 
+                  id="header-image-upload"
+                  disabled={isUploadingMedia}
+                />
+                <label 
+                  htmlFor="header-image-upload"
+                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-all hover:bg-glass"
+                  style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-glass)' }}
+                >
+                  <span style={{ fontSize: '1.5rem', marginBottom: '8px' }}>🖼️</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    {isUploadingMedia ? 'Uploading...' : 'Upload Image'}
+                  </span>
+                </label>
+              </div>
+            )}
+          </div>
+        </div>
+        <p className="mt-4" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+          Media added here will be shown to respondents as a context section at the beginning of the form.
+        </p>
       </div>
 
       {/* Questions */}

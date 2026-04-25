@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-mesh min-h-screen flex flex-col">
+      <body className="bg-mesh min-h-screen flex flex-col" suppressHydrationWarning={true}>
         {/* Top nav bar */}
         <nav
           style={{
@@ -66,7 +66,7 @@ export default function RootLayout({
           fontSize: '0.9rem',
         }}>
           <p>
-            © {new Date().getFullYear()} VoiceForm. All rights reserved. •{' '}
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> VoiceForm. All rights reserved. •{' '}
             <Link href="/privacy" style={{ color: 'var(--text-secondary)', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
               Privacy & Terms
             </Link>

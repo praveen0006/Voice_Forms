@@ -3,6 +3,8 @@
 export interface Form {
   id: string;
   title: string;
+  header_video_url?: string | null;
+  header_image_url?: string | null;
   created_at: string;
 }
 

@@ -11,19 +11,28 @@ export function getPublicUrl(bucket: string, path: string): string {
   return data.publicUrl;
 }
 
-// Upload audio file to storage bucket
-export async function uploadAudio(
-  bucket: 'voice-questions' | 'voice-answers',
-  file: Blob,
+// Upload file to storage bucket
+export async function uploadFile(
+  bucket: string,
+  file: Blob | File,
   fileName: string
 ): Promise<string> {
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(fileName, file, {
-      contentType: 'audio/webm',
-      upsert: false,
+      contentType: file.type,
+      upsert: true,
     });
 
   if (error) throw error;
   return getPublicUrl(bucket, data.path);
+}
+
+// Upload audio file (legacy helper)
+export async function uploadAudio(
+  bucket: 'voice-questions' | 'voice-answers',
+  file: Blob,
+  fileName: string
+): Promise<string> {
+  return uploadFile(bucket, file, fileName);
 }
