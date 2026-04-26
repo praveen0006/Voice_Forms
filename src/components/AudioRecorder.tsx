@@ -75,7 +75,7 @@ export default function AudioRecorder({
         // Add minimum height of 2px
         const barHeight = Math.max(2, percent * canvas.height); 
         
-        ctx.fillStyle = '#a78bfa'; // violet-light color
+        ctx.fillStyle = '#10b981'; // emerald-accent
         ctx.beginPath();
         const y = (canvas.height - barHeight) / 2;
         
@@ -199,7 +199,7 @@ export default function AudioRecorder({
         <button
           onClick={isRecording ? stopRecording : startRecording}
           disabled={disabled}
-          className={`relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] flex items-center justify-center transition-all duration-500 active:scale-95 shadow-premium ${isRecording ? 'bg-red-500 scale-110' : 'bg-violet-600 hover:bg-violet-500 hover:rotate-3'}`}
+          className={`relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-[32px] flex items-center justify-center transition-all duration-500 active:scale-95 shadow-premium ${isRecording ? 'bg-red-500 scale-110 shadow-[0_0_50px_rgba(239,68,68,0.4)]' : 'bg-emerald-600 hover:bg-emerald-500 hover:rotate-3 shadow-[0_15px_40px_rgba(16,185,129,0.3)]'}`}
           aria-label={isRecording ? 'Stop recording' : 'Start recording'}
         >
           {isRecording ? (
@@ -215,13 +215,13 @@ export default function AudioRecorder({
         </button>
         
         {/* Glowing Backgrounds */}
-        <div className={`absolute inset-0 blur-2xl -z-10 transition-all duration-700 ${isRecording ? 'bg-red-500/40 scale-150' : 'bg-violet-600/20 scale-110 opacity-0 group-hover:opacity-100'}`} />
+        <div className={`absolute inset-0 blur-2xl -z-10 transition-all duration-700 ${isRecording ? 'bg-red-500/40 scale-150' : 'bg-emerald-600/20 scale-110 opacity-0 group-hover/btn:opacity-100'}`} />
       </div>
 
       {/* Analytics & Signal Status */}
       <div className="flex flex-col items-center gap-4 w-full">
         {/* Signal Visualization */}
-        <div className={`h-12 w-full max-w-[280px] bg-white/[0.02] rounded-2xl border border-white/5 transition-all duration-500 flex items-center justify-center p-2 ${isRecording ? 'opacity-100' : 'opacity-30'}`}>
+        <div className={`h-12 w-full max-w-[280px] bg-sky-950/20 rounded-2xl border border-white/5 transition-all duration-500 flex items-center justify-center p-2 backdrop-blur-sm ${isRecording ? 'opacity-100' : 'opacity-30'}`}>
           <canvas ref={canvasRef} width={280} height={40} style={{ width: '100%', height: '100%' }} />
         </div>
 
@@ -232,14 +232,14 @@ export default function AudioRecorder({
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">Live Transmission</span>
               </div>
-              <div className="font-black text-lg tabular-nums tracking-tighter text-white">
+              <div className="font-black text-lg tabular-nums tracking-tighter text-white font-mono">
                 {formatTime(duration)} <span className="text-white/20">/</span> <span className="text-white/40">{formatTime(maxDuration)}</span>
               </div>
             </div>
           ) : (
             <div className="flex flex-col items-center">
               <span className="text-[11px] font-black uppercase tracking-[0.25em] text-slate-500">Initialize Voice Stream</span>
-              <span className="text-[9px] mt-1 font-bold text-slate-600 uppercase tracking-widest">Cap: {formatTime(maxDuration)}</span>
+              <span className="text-[9px] mt-1 font-bold text-slate-600 uppercase tracking-widest font-mono">Cap: {formatTime(maxDuration)}</span>
             </div>
           )}
         </div>

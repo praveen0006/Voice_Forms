@@ -156,12 +156,12 @@ export default function CreateFormPage() {
   const handleMediaUpload = async (file: File, type: 'video' | 'image') => {
     setIsUploadingMedia(true);
     try {
-      const bucket = type === 'video' ? 'voice-questions' : 'voice-questions'; 
+      const bucket = type === 'video' ? 'voice-questions' : 'voice-questions';
       const extension = file.name.split('.').pop();
       const fileName = `headers/${formId}/${type}_${Date.now()}.${extension}`;
-      
+
       const url = await uploadFile(bucket, file, fileName);
-      
+
       if (type === 'video') setHeaderVideoUrl(url);
       else setHeaderImageUrl(url);
     } catch (err) {
@@ -185,12 +185,12 @@ export default function CreateFormPage() {
 
   const handleDeleteForm = async () => {
     if (!confirm('Are you sure you want to delete this entire form? All questions and responses will be permanently removed.')) return;
-    
+
     setIsSaving(true);
     try {
       const { error } = await supabase.from('forms').delete().eq('id', formId);
       if (error) throw error;
-      
+
       // Update local storage
       const saved = localStorage.getItem('voiceform_my_forms');
       if (saved) {
@@ -198,7 +198,7 @@ export default function CreateFormPage() {
         const updated = parsed.filter(f => f.id !== formId);
         localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
       }
-      
+
       router.push('/');
     } catch (e) {
       console.error('Delete error:', e);
@@ -233,7 +233,7 @@ export default function CreateFormPage() {
     try {
       // Update form title and media
       const validatedTitle = title.trim() || 'Untitled Form';
-      await supabase.from('forms').update({ 
+      await supabase.from('forms').update({
         title: validatedTitle,
         header_video_url: headerVideoUrl,
         header_image_url: headerImageUrl
@@ -245,10 +245,10 @@ export default function CreateFormPage() {
         .from('questions')
         .select('id')
         .eq('form_id', formId);
-      
+
       const existingIds = (existingQs || []).map(q => q.id);
       const currentIds = questions.map(q => q.id);
-      
+
       // Delete questions that are no longer in the list
       const idsToDelete = existingIds.filter(id => !currentIds.includes(id));
       if (idsToDelete.length > 0) {
@@ -311,7 +311,7 @@ export default function CreateFormPage() {
     return (
       <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
         <div className="text-center">
-          <svg className="animate-spin mx-auto mb-4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" strokeWidth="2.5">
+          <svg className="animate-spin mx-auto mb-4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2.5">
             <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
           </svg>
           <p style={{ color: 'var(--text-muted)' }}>Loading form...</p>
@@ -330,19 +330,19 @@ export default function CreateFormPage() {
             value={title}
             onChange={(e) => { setTitle(e.target.value); }}
             placeholder="Untitled VoiceForm"
-            className="w-full text-center bg-transparent text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight outline-none border-b-2 border-dashed border-white/5 focus:border-violet-500/50 transition-all py-4 uppercase"
+            className="w-full text-center bg-transparent text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight outline-none border-b-2 border-dashed border-white/5 focus:border-cyan-500/50 transition-all py-4 uppercase"
             style={{ color: 'var(--text-primary)' }}
           />
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-violet-500/10 rounded-full border border-violet-500/20">
-            <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400">Editor Mode Active</span>
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-cyan-500/10 rounded-full border border-cyan-500/20">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">System Link Active</span>
           </div>
         </div>
       </div>
 
       {/* Form Header Media Settings */}
       <div className="glass-card mb-12 overflow-hidden border-0 sm:border relative group/settings">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-transparent pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/5 to-transparent pointer-events-none"></div>
         <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 backdrop-blur-md relative z-10">
           <div className="flex items-center justify-between">
             <div>
@@ -355,21 +355,21 @@ export default function CreateFormPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
           {/* Video Upload */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-violet-400">
-                01. Cinematic Intro (Video)
+              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-cyan-400">
+                01. Tech Intro (Video)
               </label>
               {headerVideoUrl && <span className="badge badge-success text-[9px]">Active</span>}
             </div>
-            
+
             {headerVideoUrl ? (
               <div className="relative rounded-2xl overflow-hidden bg-black aspect-video shadow-premium border border-white/5 group/media">
                 <video src={headerVideoUrl} controls className="w-full h-full" />
-                <button 
+                <button
                   onClick={() => { setHeaderVideoUrl(null); }}
                   className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-md hover:bg-red-600 text-white p-2.5 rounded-2xl shadow-xl transition-all scale-0 group-hover/media:scale-100 active:scale-95"
                   title="Remove Video"
@@ -379,15 +379,15 @@ export default function CreateFormPage() {
               </div>
             ) : (
               <div className="relative group/btn">
-                <input 
-                  type="file" 
-                  accept="video/*" 
+                <input
+                  type="file"
+                  accept="video/*"
                   onChange={(e) => e.target.files?.[0] && handleMediaUpload(e.target.files[0], 'video')}
-                  className="hidden" 
+                  className="hidden"
                   id="header-video-upload"
                   disabled={isUploadingMedia}
                 />
-                <label 
+                <label
                   htmlFor="header-video-upload"
                   className="flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-10 sm:p-14 cursor-pointer transition-all bg-white/[0.02] border-white/10 hover:bg-violet-600/5 hover:border-violet-500/50"
                 >
@@ -406,7 +406,7 @@ export default function CreateFormPage() {
           {/* Image Upload */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-violet-400">
+              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-sky-400">
                 02. High-Res Cover (Image)
               </label>
               {headerImageUrl && <span className="badge badge-success text-[9px]">Active</span>}
@@ -415,7 +415,7 @@ export default function CreateFormPage() {
             {headerImageUrl ? (
               <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-glass-strong aspect-video shadow-premium group/media">
                 <Image src={headerImageUrl} fill className="object-cover" alt="Header" />
-                <button 
+                <button
                   onClick={() => { setHeaderImageUrl(null); }}
                   className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-md hover:bg-red-600 text-white p-2.5 rounded-2xl shadow-xl transition-all scale-0 group-hover/media:scale-100 active:scale-95"
                   title="Remove Image"
@@ -425,15 +425,15 @@ export default function CreateFormPage() {
               </div>
             ) : (
               <div className="relative group/btn">
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  accept="image/*"
                   onChange={(e) => e.target.files?.[0] && handleMediaUpload(e.target.files[0], 'image')}
-                  className="hidden" 
+                  className="hidden"
                   id="header-image-upload"
                   disabled={isUploadingMedia}
                 />
-                <label 
+                <label
                   htmlFor="header-image-upload"
                   className="flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-10 sm:p-14 cursor-pointer transition-all bg-white/[0.02] border-white/10 hover:bg-pink-600/5 hover:border-pink-500/50"
                 >
@@ -455,68 +455,68 @@ export default function CreateFormPage() {
       <div className="flex flex-col gap-10 mb-16">
         <div className="flex items-center justify-between px-2">
           <h2 className="text-2xl font-black text-white flex items-center gap-4 uppercase tracking-tighter italic">
-            <div className="w-10 h-1 bg-violet-500 rounded-full"></div>
-            Questions Pipeline
+            <div className="w-10 h-1 bg-cyan-500 rounded-full"></div>
+            Digital Pipeline
           </h2>
           <div className="text-xs font-black text-slate-500 uppercase tracking-widest">
             {questions.length} Nodes
           </div>
         </div>
-        
+
         {questions.map((q, index) => (
           <div
             key={q.id}
             className="group/card animate-fade-in relative"
             style={{ animationDelay: `${index * 0.05}s` }}
           >
-            <div className="glass-card relative overflow-hidden border-0 sm:border border-white/5 transition-all duration-500 hover:border-violet-500/30 shadow-premium">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-600/5 to-transparent pointer-events-none"></div>
-              
+            <div className="glass-card relative overflow-hidden border-0 sm:border border-white/5 transition-all duration-500 hover:border-cyan-500/30 shadow-premium">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan-600/5 to-transparent pointer-events-none"></div>
+
               <div className="p-6 sm:p-10 lg:p-12">
                 {/* Question Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
                   <div className="flex items-center gap-5">
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center font-black text-xl text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                      <div className="w-12 h-12 rounded-2xl bg-cyan-600 flex items-center justify-center font-black text-xl text-white shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                         {index + 1}
                       </div>
-                      <div className="absolute -inset-2 bg-violet-500/20 blur-xl rounded-full -z-10"></div>
+                      <div className="absolute -inset-2 bg-cyan-500/20 blur-xl rounded-full -z-10"></div>
                     </div>
                     <div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 block mb-0.5">Step Sequence</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-cyan-400 block mb-0.5">Step Sequence</span>
                       <h3 className="text-lg font-black text-white uppercase italic tracking-tight leading-none">Voice Prompt Node</h3>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 overflow-x-auto pb-1 sm:pb-0">
                     <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-[18px] border border-white/10">
-                       <select
-                          value={q.max_duration || 300}
+                      <select
+                        value={q.max_duration || 300}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value);
+                          setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, max_duration: val } : pq));
+                        }}
+                        className="bg-transparent text-[11px] font-black uppercase px-3 py-2 outline-none cursor-pointer border-none text-cyan-300"
+                      >
+                        <option value={30}>30s TimeOut</option>
+                        <option value={60}>1m TimeOut</option>
+                        <option value={120}>2m TimeOut</option>
+                        <option value={300}>5m TimeOut</option>
+                      </select>
+
+                      <div className="w-[1px] h-4 bg-white/10 mx-1" />
+
+                      <label className="flex items-center gap-3 px-3 cursor-pointer group/toggle">
+                        <input
+                          type="checkbox"
+                          checked={q.is_required}
                           onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, max_duration: val } : pq));
+                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
                           }}
-                          className="bg-transparent text-[11px] font-black uppercase px-3 py-2 outline-none cursor-pointer border-none text-violet-300"
-                        >
-                          <option value={30}>30s TimeOut</option>
-                          <option value={60}>1m TimeOut</option>
-                          <option value={120}>2m TimeOut</option>
-                          <option value={300}>5m TimeOut</option>
-                        </select>
-
-                        <div className="w-[1px] h-4 bg-white/10 mx-1" />
-
-                        <label className="flex items-center gap-3 px-3 cursor-pointer group/toggle">
-                          <input
-                            type="checkbox"
-                            checked={q.is_required}
-                            onChange={(e) => {
-                              setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
-                            }}
-                            className="w-4 h-4 accent-violet-500 rounded cursor-pointer"
-                          />
-                          <span className="text-[11px] font-black uppercase tracking-widest text-slate-300 group-hover/toggle:text-white transition-colors">Mandatory</span>
-                        </label>
+                          className="w-4 h-4 accent-cyan-500 rounded cursor-pointer"
+                        />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-slate-300 group-hover/toggle:text-white transition-colors">Mandatory</span>
+                      </label>
                     </div>
 
                     <div className="flex items-center bg-white/5 p-1.5 rounded-[18px] border border-white/10">
@@ -526,7 +526,7 @@ export default function CreateFormPage() {
                         className="p-2 hover:bg-white/10 rounded-xl disabled:opacity-20 transition-all active:scale-90"
                         title="Move Up"
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15" /></svg>
                       </button>
                       <button
                         onClick={() => moveQuestion(index, 'down')}
@@ -534,7 +534,7 @@ export default function CreateFormPage() {
                         className="p-2 hover:bg-white/10 rounded-xl disabled:opacity-20 transition-all active:scale-90"
                         title="Move Down"
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9" /></svg>
                       </button>
                     </div>
 
@@ -558,8 +558,8 @@ export default function CreateFormPage() {
                   <div className="flex flex-col gap-5 order-2 lg:order-1">
                     <div className="flex items-center justify-between px-1">
                       <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
-                        Voice capture
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                        Signal Capture
                       </label>
                       {q.isUploading && (
                         <div className="flex items-center gap-2 text-[9px] font-black text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 uppercase tracking-widest">
@@ -567,9 +567,9 @@ export default function CreateFormPage() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="p-8 sm:p-10 bg-white/[0.03] rounded-[32px] border border-white/5 min-h-[160px] flex items-center justify-center relative overflow-hidden group/recorder">
-                      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/[0.03] to-transparent pointer-events-none"></div>
                       {q.audioUrl ? (
                         <div className="w-full space-y-6 relative z-10">
                           <AudioPlayer src={q.audioUrl} compact />
@@ -596,8 +596,8 @@ export default function CreateFormPage() {
                   {/* Text Content Column */}
                   <div className="flex flex-col gap-5 order-1 lg:order-2">
                     <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3 px-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
-                      Metadata Transcript
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Data Transcript
                     </label>
                     <textarea
                       value={q.text}
@@ -619,9 +619,9 @@ export default function CreateFormPage() {
         <button
           onClick={addQuestion}
           disabled={isCurrentlyRecording}
-          className="group flex flex-col items-center justify-center w-full py-16 text-xl font-black border-2 border-dashed rounded-[40px] transition-all bg-white/[0.02] border-white/5 hover:border-violet-500/50 hover:bg-violet-500/[0.03] active:scale-[0.99] disabled:opacity-20"
+          className="group flex flex-col items-center justify-center w-full py-16 text-xl font-black border-2 border-dashed rounded-[40px] transition-all bg-white/[0.02] border-white/5 hover:border-cyan-500/50 hover:bg-cyan-500/[0.03] active:scale-[0.99] disabled:opacity-20"
         >
-          <div className="w-20 h-20 rounded-[28px] bg-white/5 flex items-center justify-center mb-6 group-hover:bg-violet-600 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-xl border border-white/5">
+          <div className="w-20 h-20 rounded-[28px] bg-white/5 flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-xl border border-white/5">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4">
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
@@ -640,7 +640,7 @@ export default function CreateFormPage() {
                 <button
                   onClick={saveForm}
                   disabled={isSaving || questions.length === 0 || isCurrentlyRecording}
-                  className={`btn-primary flex-1 py-5 text-xl font-black tracking-tighter uppercase shadow-[0_10px_40px_rgba(139,92,246,0.3)] rounded-2xl group transition-all duration-500 ${isSaving ? 'scale-95' : 'hover:scale-[1.01] active:scale-95'}`}
+                  className={`btn-primary flex-1 py-5 text-xl font-black tracking-tighter uppercase shadow-[0_10px_45px_rgba(6,182,212,0.3)] rounded-2xl group transition-all duration-500 ${isSaving ? 'scale-95' : 'hover:scale-[1.01] active:scale-95'}`}
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   {isCurrentlyRecording ? (
@@ -655,8 +655,8 @@ export default function CreateFormPage() {
                   ) : (
                     <div className="flex items-center gap-4">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
                       </svg>
                       Finalize & Deploy Form
                     </div>
@@ -669,7 +669,7 @@ export default function CreateFormPage() {
                   title="Purge VoiceForm"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover/del:scale-125 group-hover/del:rotate-12 transition-all duration-500">
-                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                   </svg>
                 </button>
               </div>

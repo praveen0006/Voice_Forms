@@ -98,7 +98,7 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
         const percent = dataArray[i] / 255;
         const barHeight = Math.max(2, percent * canvas.height); 
         
-        ctx.fillStyle = isPlaying ? '#ec4899' : '#a78bfa'; // pink when playing, violet otherwise
+        ctx.fillStyle = isPlaying ? '#10b981' : '#0d9488'; // Emerald when playing, Teal otherwise
         ctx.beginPath();
         const y = (canvas.height - barHeight) / 2;
         ctx.roundRect(x, y, barWidth - 2, barHeight, 4);
@@ -160,10 +160,10 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
     <div
       className={`flex items-center gap-4 ${compact ? 'p-3' : 'p-4 sm:p-5'}`}
       style={{
-        background: 'rgba(255, 255, 255, 0.02)',
+        background: 'rgba(2, 6, 23, 0.4)',
         borderRadius: '24px',
         border: '1px solid rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(20px)',
       }}
     >
       <audio ref={audioRef} src={src} crossOrigin="anonymous" preload="metadata" />
@@ -171,11 +171,11 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
       {/* Play/Pause Button */}
       <button
         onClick={togglePlay}
-        className="flex items-center justify-center shrink-0 shadow-lg hover:scale-105 active:scale-95 transition-all"
+        className="flex items-center justify-center shrink-0 shadow-[0_10px_25px_rgba(16,185,129,0.3)] hover:scale-105 active:scale-95 transition-all"
         style={{
           width: compact ? '48px' : '56px',
           height: compact ? '48px' : '56px',
-          borderRadius: '20px',
+          borderRadius: '18px',
           background: 'var(--primary-gradient)',
           border: 'none',
           cursor: 'pointer',
@@ -216,10 +216,10 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
             onChange={handleSeek}
             className="audio-progress flex-1"
             style={{
-              background: `linear-gradient(to right, var(--accent-violet) ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
+              background: `linear-gradient(to right, var(--emerald-accent) ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
             }}
           />
-          <div className="flex tabular-nums font-black text-[10px] tracking-widest text-slate-500 uppercase" style={{ minWidth: '70px', justifyContent: 'flex-end' }}>
+          <div className="flex tabular-nums font-black text-[10px] tracking-widest text-slate-500 uppercase font-mono" style={{ minWidth: '70px', justifyContent: 'flex-end' }}>
             <span>{formatTime(currentTime)}</span>
             <span className="mx-1">/</span>
             <span>{isLoaded ? formatTime(duration) : '0:00'}</span>

@@ -23,7 +23,7 @@ export default function Home() {
     if (saved) {
       try {
         setRecentForms(JSON.parse(saved));
-      } catch {}
+      } catch { }
     }
   }, []);
 
@@ -40,7 +40,7 @@ export default function Home() {
         .single();
 
       if (error) throw error;
-      
+
       const newForm = { id: data.id, title: data.title, created_at: data.created_at };
       const updatedForms = [newForm, ...recentForms];
       localStorage.setItem('voiceform_my_forms', JSON.stringify(updatedForms));
@@ -55,11 +55,11 @@ export default function Home() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this form and all its responses? This cannot be undone.')) return;
-    
+
     try {
       const { error } = await supabase.from('forms').delete().eq('id', id);
       if (error) throw error;
-      
+
       const updated = recentForms.filter(f => f.id !== id);
       setRecentForms(updated);
       localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
@@ -70,163 +70,111 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 sm:py-32 relative overflow-hidden" style={{ minHeight: 'min-content' }}>
-      {/* Hero Section */}
-      <section className="text-center animate-slide-up w-full px-4 sm:px-0" style={{ maxWidth: '900px' }}>
-        {/* Animated Brand Node */}
-        <div className="relative mx-auto mb-16 group cursor-pointer animate-float">
-          <div className="absolute inset-0 bg-violet-600/40 blur-[50px] rounded-full group-hover:bg-violet-600/60 transition-all duration-1000"></div>
-          <div className="absolute -inset-4 border border-white/5 rounded-[40px] rotate-6 group-hover:rotate-0 transition-transform duration-700"></div>
-          <div className="absolute -inset-8 border border-white/5 rounded-[50px] -rotate-3 group-hover:rotate-0 transition-transform duration-1000 delay-100"></div>
-          <div
-            className="relative mx-auto w-24 h-24 sm:w-32 sm:h-32 rounded-[35px] bg-gradient-to-br from-[#8b5cf6] to-[#ec4899] flex items-center justify-center shadow-premium group-hover:scale-110 transition-all duration-700"
-          >
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="white shadow-2xl" className="sm:w-16 sm:h-16">
-              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-            </svg>
-          </div>
-        </div>
-
-        <h1 className="text-balance text-4xl sm:text-7xl lg:text-8xl font-black mb-8 leading-[0.95] tracking-tighter text-white uppercase italic">
-          Sculpted for<br />
-          <span className="italic-gradient-text drop-shadow-[0_0_40px_rgba(139,92,246,0.4)]">the user voice</span>
-        </h1>
-
-        <p className="text-xl sm:text-2xl mb-16 leading-relaxed max-w-2xl mx-auto font-black uppercase tracking-widest text-[#64748b] opacity-80">
-          Transforming standard surveys into <span className="text-white italic">high-fidelity</span> conversational experiences.
-        </p>
-
-        {/* Quick Activation Card */}
-        <div className="glass-card p-10 sm:p-14 text-left mx-auto mb-32 relative border-white/5 rounded-[50px] shadow-premium group/create" style={{ maxWidth: '700px', animationDelay: '0.1s' }}>
-          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[11px] font-black px-6 py-2 rounded-2xl shadow-[0_0_20px_rgba(139,92,246,0.6)] tracking-[0.3em] uppercase italic">Create New Form</div>
-          
-          <div className="flex flex-col gap-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <label
-                  htmlFor="form-title"
-                  className="text-[11px] font-black text-violet-400 mb-2 block uppercase tracking-[0.25em]"
-                >
-                  01. Form Name
-                </label>
-                <input
-                  id="form-title"
-                  type="text"
-                  placeholder="E.g. Product Feedback"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="input-field py-6 px-7 text-lg font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-3xl"
-                  autoFocus
-                />
-              </div>
-
-              <div className="space-y-4">
-                <label
-                  htmlFor="form-email"
-                  className="text-[11px] font-black text-pink-400 mb-2 block uppercase tracking-[0.25em]"
-                >
-                  02. Alert Email
-                </label>
-                <input
-                  id="form-email"
-                  type="email"
-                  placeholder="alerts@nexera.io"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-                  className="input-field py-6 px-7 text-lg font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-3xl"
-                />
-              </div>
+    <div className="w-full relative overflow-hidden flex flex-col items-center">
+      {/* Background Atmosphere Shim for Page-Specific Layering if needed */}
+      
+      <section className="w-full animate-fade-in max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-20 lg:py-32">
+        <div className="text-center mb-16 sm:mb-24 flex flex-col items-center">
+          <div className="relative mb-12 group cursor-pointer animate-float">
+            <div className="absolute inset-0 bg-cyan-600/20 blur-[60px] rounded-full"></div>
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-[35px] bg-gradient-to-br from-cyan-600 to-sky-500 flex items-center justify-center shadow-premium group-hover:scale-105 transition-all duration-700">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="white shadow-2xl">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
             </div>
+          </div>
 
-            <button
-              onClick={handleCreate}
-              disabled={isCreating}
-              className="btn-primary w-full h-24 text-2xl font-black tracking-tighter group relative overflow-hidden rounded-[32px] shadow-[0_20px_50px_rgba(139,92,246,0.3)] transition-all active:scale-95"
-            >
-              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <span className="relative flex items-center justify-center gap-5 uppercase italic">
-                 {isCreating ? (
-                   <>
-                     <svg className="animate-spin" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
-                       <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                     </svg>
-                     Creating...
-                   </>
-                 ) : (
-                   <>
-                     Create Form
-                     <svg className="group-hover:translate-x-3 transition-transform duration-700" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
-                       <line x1="5" y1="12" x2="19" y2="12" />
-                       <polyline points="12 5 19 12 12 19" />
-                     </svg>
-                   </>
-                 )}
-              </span>
-            </button>
+          <h1 className="text-balance text-6xl sm:text-8xl lg:text-9xl font-black mb-6 sm:mb-8 leading-[0.85] sm:leading-[0.8] tracking-tighter text-primary uppercase italic">
+            Voice<br />
+            <span className="text-tech-glow drop-shadow-[0_0_80px_rgba(6,182,212,0.5)]">Feedback</span>
+          </h1>
+
+          <p className="text-base sm:text-lg lg:text-xl mb-12 sm:mb-16 leading-relaxed max-w-xl mx-auto font-black uppercase tracking-[0.3em] text-slate-500/60 px-4">
+            Easy Voice Forms
+          </p>
+        </div>
+
+        {/* Focused Creation Hub */}
+        <div className="glass-card mb-20 sm:mb-40 p-6 sm:p-12 lg:p-20 border-white/5 shadow-premium relative overflow-hidden rounded-[40px] sm:rounded-[60px] mx-auto max-w-4xl">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-cyan-600/5 to-transparent pointer-events-none"></div>
+          
+          <div className="relative z-10">
+            <div className="flex flex-col gap-8 sm:gap-14">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-14">
+                <div className="space-y-4 sm:space-y-6">
+                  <label className="text-[9px] font-black text-cyan-400 mb-2 block uppercase tracking-[0.5em] font-mono">01. Form Title</label>
+                  <input
+                    type="text"
+                    placeholder="E.g. Product Feedback"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="input-field py-4 sm:py-7 px-6 sm:px-8 text-lg sm:text-2xl font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-[20px] sm:rounded-[32px] placeholder:text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-4 sm:space-y-6">
+                  <label className="text-[9px] font-black text-sky-400 mb-2 block uppercase tracking-[0.5em] font-mono">02. Alert Email</label>
+                  <input
+                    type="email"
+                    placeholder="alerts@nexera.io"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                    className="input-field py-4 sm:py-7 px-6 sm:px-8 text-lg sm:text-2xl font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-[20px] sm:rounded-[32px] placeholder:text-slate-800"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleCreate}
+                disabled={isCreating}
+                className="btn-primary w-full h-20 sm:h-24 text-xl sm:text-2xl group active:scale-[0.98] transition-all shadow-premium"
+              >
+                <span className="flex items-center justify-center gap-4 sm:gap-5 uppercase italic tracking-tight">
+                  {isCreating ? "Making..." : "Make Form"}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Global Registry Section */}
+        {/* Recent Projects List */}
         {recentForms.length > 0 && (
-          <div className="mt-16 animate-fade-in text-left w-full border-t border-white/5 pt-24 pb-32">
-            <div className="flex items-center justify-between mb-16 px-4">
-               <h2 className="text-3xl font-black tracking-tighter text-white flex items-center gap-6 uppercase italic">
-                 <div className="w-16 h-1.5 bg-violet-600 rounded-full"></div>
-                 Your Forms
+          <div className="animate-fade-in w-full pb-32">
+            <div className="flex items-center justify-between mb-10 px-4">
+               <h2 className="text-2xl font-black tracking-tighter text-primary uppercase italic">
+                 My Forms
                </h2>
-              <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5">
-                 <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                   {recentForms.length} Forms Live
-                 </span>
-              </div>
+               <span className="tech-label">
+                 {recentForms.length} Done
+               </span>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 px-4 sm:px-0">
               {recentForms.slice(0, 6).map((form, i) => (
-                <div 
-                  key={form.id} 
-                  className="group/project animate-slide-up"
-                  style={{ animationDelay: `${0.2 + i * 0.1}s` }}
-                >
-                  <div className="glass-card p-10 sm:p-12 border-white/5 rounded-[45px] hover:border-violet-500/30 transition-all duration-700 shadow-premium relative overflow-hidden h-full flex flex-col">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-600/[0.03] to-transparent pointer-events-none"></div>
-                    
-                    <div className="flex flex-col flex-1 gap-10">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 truncate pr-6">
-                            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-3 block">Form # 0{recentForms.length - i}</div>
-                           <h3 className="font-black text-2xl sm:text-3xl text-white group-hover/project:italic-gradient-text transition-all truncate tracking-tighter uppercase italic leading-none">
-                            {form.title}
-                          </h3>
-                          <div className="mt-5 flex items-center gap-4 text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                            <span className="flex items-center gap-2">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                               Created {new Date(form.created_at).toLocaleDateString()}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="w-16 h-16 rounded-[24px] bg-white/[0.03] flex items-center justify-center shrink-0 border border-white/10 group-hover/project:bg-violet-600 transition-all duration-700 shadow-xl">
-                          <span className="text-2xl">🎙️</span>
-                        </div>
+                <div key={form.id} className="group/project animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+                  <div className="glass-card p-6 sm:p-10 border-white/5 rounded-[32px] sm:rounded-[40px] hover:border-cyan-500/20 transition-all duration-700 shadow-premium relative overflow-hidden">
+                    <div className="flex flex-col gap-6 sm:gap-10">
+                      <div className="flex flex-col gap-2">
+                        <div className="text-[9px] font-black font-mono text-cyan-600 uppercase tracking-[0.2em] mb-2 opacity-80">ID: {form.id.slice(0, 8)}</div>
+                        <h3 className="font-black text-2xl sm:text-3xl text-primary group-hover/project:text-cyan-400 transition-all truncate tracking-tighter uppercase italic leading-none">
+                          {form.title}
+                        </h3>
                       </div>
                       
-                      <div className="flex flex-col sm:flex-row items-center gap-4">
-                          <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-14 rounded-2xl shadow-xl">
-                           Edit Form
-                         </Link>
-                         <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-14 rounded-2xl shadow-xl">
-                           View Results
-                         </Link>
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-11 sm:h-12 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] shadow-premium font-black uppercase">
+                          Settings
+                        </Link>
+                        <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-11 sm:h-12 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] shadow-xl font-black uppercase">
+                          Check
+                        </Link>
                         <button 
                           onClick={() => handleDelete(form.id)}
-                          className="btn-danger h-14 w-14 rounded-2xl shrink-0"
-                          title="Purge Object"
+                          className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl border border-white/5 flex items-center justify-center hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0"
                         >
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="transition-transform group-hover/project:rotate-12 group-hover/project:scale-110">
-                            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                          </svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="sm:w-[18px] sm:h-[18px]"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                       </div>
                     </div>

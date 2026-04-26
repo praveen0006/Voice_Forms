@@ -230,7 +230,7 @@ export default function RespondFormPage() {
     return (
       <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
         <div className="text-center">
-          <svg className="animate-spin mx-auto mb-4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" strokeWidth="2.5">
+          <svg className="animate-spin mx-auto mb-4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2.5">
             <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
           </svg>
           <p style={{ color: 'var(--text-muted)' }}>Loading form...</p>
@@ -265,21 +265,21 @@ export default function RespondFormPage() {
               width: '64px',
               height: '64px',
               borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '2px solid var(--accent-emerald)',
+              background: 'rgba(6, 182, 212, 0.15)',
+              border: '2px solid var(--cyan-accent)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px',
             }}
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" strokeWidth="2.5">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-accent)" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '8px' }}>Response Submitted!</h2>
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '8px' }}>Answer Sent!</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-            Thank you for completing this VoiceForm.
+            Thank you for answering this Form.
           </p>
           
           {/* NexEraEco link */}
@@ -288,13 +288,13 @@ export default function RespondFormPage() {
               Want to see what else we do?
             </p>
             <a 
-              href="https://nexeraeco.vercel.app/" 
+              href="https://nexera.io" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn-secondary w-full"
               style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textDecoration: 'none' }}
             >
-              Explore NexEraEco
+              Explore NexEra
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
@@ -322,13 +322,13 @@ export default function RespondFormPage() {
             {questions.map((_, i) => (
               <div 
                 key={i} 
-                className={`h-1.5 rounded-full transition-all duration-700 ${i === currentQuestion ? 'w-10 bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.5)]' : 'w-1.5 bg-white/10'}`} 
+                className={`h-1.5 rounded-full transition-all duration-700 ${i === currentQuestion ? 'w-10 bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'w-1.5 bg-white/10'}`} 
               />
             ))}
           </div>
           <div className="px-5 py-2 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md">
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">
-              Question <span className="text-violet-400">{currentQuestion + 1}</span> of {questions.length}
+              Question <span className="text-emerald-400">{currentQuestion + 1}</span> of {questions.length}
             </span>
           </div>
         </div>
@@ -339,7 +339,7 @@ export default function RespondFormPage() {
         <div className="glass-card mb-16 overflow-hidden border border-white/5 animate-fade-in shadow-premium rounded-[40px] group/hero">
           <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 flex items-center justify-between">
              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"></span>
               Information
             </h2>
           </div>
@@ -371,14 +371,14 @@ export default function RespondFormPage() {
       {/* Question Card */}
       {currentQ && (
         <div className="flex flex-col gap-10">
-          <div className="glass-card p-10 sm:p-14 lg:p-20 relative overflow-hidden rounded-[50px] border-white/5 hover:border-violet-500/20 transition-all duration-1000 shadow-premium" key={currentQ.id}>
-             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+          <div className="glass-card p-10 sm:p-14 lg:p-20 relative overflow-hidden rounded-[50px] border-white/5 hover:border-emerald-500/20 transition-all duration-1000 shadow-premium" key={currentQ.id}>
+             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-emerald-600/[0.03] to-transparent pointer-events-none"></div>
              
              {/* Question Badge */}
              <div className="mb-10 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-6 bg-violet-600 rounded-full"></div>
-                  <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400">
+                  <div className="w-1.5 h-6 bg-cyan-600 rounded-full"></div>
+                  <span className="text-[11px] font-black uppercase tracking-[0.25em] text-cyan-400">
                     Question
                   </span>
                 </div>
@@ -412,7 +412,7 @@ export default function RespondFormPage() {
           {currentAnswer && (
             <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <div className="flex items-center justify-between mb-6 px-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Record Your Answer</h3>
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Your Answer</h3>
                 <div className="w-12 h-[1px] bg-white/5"></div>
               </div>
               
@@ -420,9 +420,9 @@ export default function RespondFormPage() {
                  <div className="p-8 sm:p-14 space-y-12">
                     {/* Voice answer */}
                     <div className="space-y-6">
-                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-violet-400 uppercase tracking-[0.2em]">
-                        <span className="w-1 h-1 rounded-full bg-violet-500"></span>
-                        Voice capture mode
+                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"></span>
+                        Voice Capture
                       </div>
                       <div className="flex flex-col items-center">
                         {currentAnswer.audioUrl ? (
@@ -451,15 +451,15 @@ export default function RespondFormPage() {
 
                     {/* Designer Divider */}
                     <div className="relative h-[2px] bg-white/5 w-full flex items-center justify-center">
-                      <div className="absolute inset-x-0 h-[10px] bg-[#0a0e27]/80 backdrop-blur-sm -z-10"></div>
-                      <span className="bg-[#0a0e27] border border-white/10 px-6 py-1.5 rounded-full text-[11px] font-black text-white/40 tracking-[0.3em] italic uppercase">Hybrid</span>
+                      <div className="absolute inset-x-0 h-[10px] bg-sky-950/20 backdrop-blur-sm -z-10"></div>
+                      <span className="bg-sky-950/40 border border-white/10 px-6 py-1.5 rounded-full text-[11px] font-black text-white/40 tracking-[0.3em] italic uppercase">Hybrid</span>
                     </div>
 
                     {/* Text answer */}
                     <div className="space-y-6">
-                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-pink-400 uppercase tracking-[0.2em]">
-                        <span className="w-1 h-1 rounded-full bg-pink-500"></span>
-                        Manual Input (Optional fallback)
+                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-teal-400 uppercase tracking-[0.2em]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.5)]"></span>
+                        Manual Input
                       </div>
                       <textarea
                         value={currentAnswer.text}
@@ -496,7 +496,7 @@ export default function RespondFormPage() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isCurrentlyRecording}
-                className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] disabled:opacity-50 relative overflow-hidden group"
+                className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_45px_rgba(16,185,129,0.3)] disabled:opacity-50 relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 {isCurrentlyRecording ? (
@@ -522,7 +522,7 @@ export default function RespondFormPage() {
                 <button
                   onClick={goToNext}
                   disabled={isCurrentlyRecording}
-                  className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] disabled:opacity-50 transition-all relative overflow-hidden group"
+                  className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_45px_rgba(6,182,212,0.3)] disabled:opacity-50 transition-all relative overflow-hidden group"
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   {isCurrentlyRecording ? 'Processing Voice...' : (
@@ -554,7 +554,7 @@ export default function RespondFormPage() {
           <div className="mt-6 flex justify-center">
             <div className="flex items-center gap-3 px-6 py-2 bg-white/5 rounded-full border border-white/5 backdrop-blur-md">
                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Made by</span>
-               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 italic">NexEraEco</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400 italic">NexEraEco</span>
             </div>
           </div>
         </div>
