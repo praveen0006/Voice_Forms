@@ -294,8 +294,31 @@ export default function ResponsesDashboard() {
                             
                             {answer.text && (
                               <div className="space-y-2">
-                                <div className="text-[10px] font-bold uppercase tracking-widest text-violet-400">
-                                   Text Response
+                                <div className="flex items-center justify-between">
+                                  <div className="text-[10px] font-bold uppercase tracking-widest text-violet-400">
+                                     Text Response
+                                  </div>
+                                  <button
+                                    onClick={() => {
+                                      const utterance = new SpeechSynthesisUtterance(answer.text);
+                                      // Premium feel: select a nice voice if available
+                                      const voices = window.speechSynthesis.getVoices();
+                                      const premiumVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
+                                      if (premiumVoice) utterance.voice = premiumVoice;
+                                      
+                                      utterance.rate = 0.95; // Slightly slower for clarity
+                                      utterance.pitch = 1;
+                                      window.speechSynthesis.cancel(); // Stop any current speaking
+                                      window.speechSynthesis.speak(utterance);
+                                    }}
+                                    className="bg-violet-500/10 hover:bg-violet-500/20 text-violet-400 text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 transition-colors border border-violet-500/20"
+                                  >
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                                    </svg>
+                                    Play AI Voice
+                                  </button>
                                 </div>
                                 <div className="text-base sm:text-lg leading-relaxed font-medium text-white/80">
                                   {answer.text}

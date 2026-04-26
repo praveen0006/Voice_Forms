@@ -77,7 +77,7 @@ export default function RespondFormPage() {
     loadForm();
   }, [formId]);
 
-  // Handle answer recording
+  // Handle answer recording with Auto-Transcription
   const handleAnswerRecording = useCallback((questionId: string, blob: Blob) => {
     const url = URL.createObjectURL(blob);
     setAnswers((prev) => {
@@ -90,6 +90,46 @@ export default function RespondFormPage() {
       return next;
     });
   }, []);
+
+  // Live Auto-Transcription Logic
+  useEffect(() => {
+    if (!isCurrentlyRecording) return;
+
+    try {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        
+        if (transcript) {
+          const qId = questions[currentQuestion]?.id;
+          if (qId) {
+            setAnswers((prev) => {
+              const next = new Map(prev);
+              const existing = next.get(qId)!;
+              // Only overwrite if text is empty or the user hasn't manually typed a lot
+              next.set(qId, { ...existing, text: transcript });
+              return next;
+            });
+          }
+        }
+      };
+
+      recognition.start();
+      return () => recognition.stop();
+    } catch (e) {
+      console.error('Speech recognition error:', e);
+    }
+  }, [isCurrentlyRecording, currentQuestion, questions]);
 
   // Remove answer audio
   const removeAnswerAudio = useCallback((questionId: string) => {
