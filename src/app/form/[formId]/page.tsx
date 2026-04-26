@@ -328,7 +328,7 @@ export default function RespondFormPage() {
           </div>
           <div className="px-5 py-2 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md">
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">
-              Sequence <span className="text-violet-400">0{currentQuestion + 1}</span> — 0{questions.length}
+              Question <span className="text-violet-400">{currentQuestion + 1}</span> of {questions.length}
             </span>
           </div>
         </div>
@@ -340,7 +340,7 @@ export default function RespondFormPage() {
           <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 flex items-center justify-between">
              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
-              Context Briefing
+              Information
             </h2>
           </div>
           <div className="flex flex-col">
@@ -379,11 +379,11 @@ export default function RespondFormPage() {
                 <div className="flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-violet-600 rounded-full"></div>
                   <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400">
-                    Incoming Prompt
+                    Question
                   </span>
                 </div>
                 {!currentQ.is_required && (
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-white/5 px-4 py-1.5 rounded-full border border-white/5">Option Ref</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-white/5 px-4 py-1.5 rounded-full border border-white/5">Optional</span>
                 )}
              </div>
 
@@ -412,7 +412,7 @@ export default function RespondFormPage() {
           {currentAnswer && (
             <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <div className="flex items-center justify-between mb-6 px-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Transmission Input</h3>
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Record Your Answer</h3>
                 <div className="w-12 h-[1px] bg-white/5"></div>
               </div>
               
@@ -434,7 +434,7 @@ export default function RespondFormPage() {
                               onClick={() => removeAnswerAudio(currentQ.id)}
                               className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors bg-white/5 px-6 py-2.5 rounded-2xl border border-white/5 hover:bg-white/10"
                             >
-                              Reset Capture
+                              Try Again
                             </button>
                           </div>
                         ) : (
@@ -506,11 +506,11 @@ export default function RespondFormPage() {
                     <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                       <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
                     </svg>
-                    Transmitting...
+                    Sending...
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    Transmit Response
+                    Submit Response
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" className="group-hover:translate-x-1 transition-transform">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
@@ -527,7 +527,7 @@ export default function RespondFormPage() {
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   {isCurrentlyRecording ? 'Processing Voice...' : (
                     <div className="flex items-center gap-3">
-                      Proceed
+                      Next
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" className="group-hover:translate-x-2 transition-transform">
                         <line x1="5" y1="12" x2="19" y2="12" />
                         <polyline points="12 5 19 12 12 19" />
@@ -553,8 +553,8 @@ export default function RespondFormPage() {
           {/* Branded Footer */}
           <div className="mt-6 flex justify-center">
             <div className="flex items-center gap-3 px-6 py-2 bg-white/5 rounded-full border border-white/5 backdrop-blur-md">
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Architecture by</span>
-               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 italic">NexEraEco Core</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Made by</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 italic">NexEraEco</span>
             </div>
           </div>
         </div>

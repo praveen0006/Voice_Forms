@@ -176,25 +176,25 @@ export default function ResponsesDashboard() {
                   {respondents.length} ACTIVE {respondents.length === 1 ? 'Submission' : 'Submissions'}
                 </span>
               </div>
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic">
-                Data Intel Core v1.4
-              </span>
+               <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic">
+                 Dashboard v1.4
+               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link 
-              href={`/create/${form.id}`} 
-              className="btn-secondary h-16 px-10 rounded-2xl"
-            >
-              Adjust Node
-            </Link>
-            <Link 
-              href={`/form/${form.id}`} 
-              className="btn-primary px-10 h-16 flex items-center justify-center rounded-2xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] active:scale-95"
-            >
-              Access Link
-            </Link>
+             <Link 
+               href={`/create/${form.id}`} 
+               className="btn-secondary h-16 px-10 rounded-2xl"
+             >
+               Edit Form
+             </Link>
+             <Link 
+               href={`/form/${form.id}`} 
+               className="btn-primary px-10 h-16 flex items-center justify-center rounded-2xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] active:scale-95"
+             >
+               View Form
+             </Link>
           </div>
         </div>
       </div>
@@ -206,14 +206,14 @@ export default function ResponsesDashboard() {
           <div className="w-24 h-24 rounded-[32px] bg-white/5 mx-auto flex items-center justify-center mb-10 border border-white/5 shadow-inner">
             <span className="text-5xl">📡</span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black mb-4 uppercase tracking-tighter italic text-white">Signal Discovery Pending</h3>
-          <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] max-w-sm mx-auto mb-12 leading-relaxed">
-            Scanning for incoming voice transmissions. Share your unique access point to begin capture.
-          </p>
-          <div className="p-5 bg-violet-500/5 rounded-[28px] border border-violet-500/10 inline-flex items-center gap-4 text-xs font-black text-violet-400 tracking-tighter group hover:border-violet-500/30 transition-all cursor-pointer">
-             <span className="text-slate-600 uppercase tracking-[0.2em] font-medium mr-2">Endpoint //</span>
-             voiceform.app/form/{formId}
-          </div>
+           <h3 className="text-2xl sm:text-3xl font-black mb-4 uppercase tracking-tighter italic text-white">No Responses Yet</h3>
+           <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] max-w-sm mx-auto mb-12 leading-relaxed">
+             Share your link to start receiving voice messages from your audience.
+           </p>
+           <div className="p-5 bg-violet-500/5 rounded-[28px] border border-violet-500/10 inline-flex items-center gap-4 text-xs font-black text-violet-400 tracking-tighter group hover:border-violet-500/30 transition-all cursor-pointer">
+              <span className="text-slate-600 uppercase tracking-[0.2em] font-medium mr-2">Link //</span>
+              voiceform.app/form/{formId}
+           </div>
         </div>
       ) : (
         <div className="space-y-16">
@@ -235,11 +235,11 @@ export default function ResponsesDashboard() {
                       </div>
                       <div className="absolute -inset-2 bg-violet-500/10 blur-xl rounded-full -z-10 group-hover/card:opacity-100 opacity-0 transition-opacity"></div>
                     </div>
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-1">Transmission Object</div>
-                      <h3 className="text-xl sm:text-2xl font-black text-white italic uppercase tracking-tighter leading-none">
-                        Respondent Sequence #{respondents.length - index}
-                      </h3>
+                     <div>
+                       <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-1">Response Data</div>
+                       <h3 className="text-xl sm:text-2xl font-black text-white italic uppercase tracking-tighter leading-none">
+                         Response #{respondents.length - index}
+                       </h3>
                       <div className="flex items-center gap-3 mt-3">
                         <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{new Date(respondent.response.created_at).toLocaleString([], { dateStyle: 'medium' })}</span>
                         <div className="w-1 h-1 rounded-full bg-white/10"></div>
@@ -249,21 +249,21 @@ export default function ResponsesDashboard() {
                   </div>
                   
                   <button
-                    onClick={() => handleDeleteResponse(respondent.response.id)}
-                    disabled={isDeleting === respondent.response.id}
-                    className="btn-danger h-16 w-16 rounded-2xl group/del transition-all"
-                    title="Purge Object"
-                  >
-                    {isDeleting === respondent.response.id ? (
-                      <svg className="animate-spin" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
-                        <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                      </svg>
-                    ) : (
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover/del:scale-110 group-hover/del:rotate-12 transition-transform">
-                        <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                    )}
-                  </button>
+                     onClick={() => handleDeleteResponse(respondent.response.id)}
+                     disabled={isDeleting === respondent.response.id}
+                     className="btn-danger h-16 w-16 rounded-2xl group/del transition-all"
+                     title="Delete Response"
+                   >
+                     {isDeleting === respondent.response.id ? (
+                       <svg className="animate-spin" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                         <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                       </svg>
+                     ) : (
+                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover/del:scale-110 group-hover/del:rotate-12 transition-transform">
+                         <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                       </svg>
+                     )}
+                   </button>
                 </div>
 
                 {/* Answers Grid */}
@@ -279,12 +279,12 @@ export default function ResponsesDashboard() {
                                <div className="text-[11px] font-black w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-slate-400 group-hover/node:bg-violet-600 transition-colors">
                                   {qIndex + 1}
                                </div>
-                               <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400/80">
-                                 Question Prompt
+                                <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400/80">
+                                 Question
                                </span>
                             </div>
                             <h4 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white/95 leading-tight italic">
-                              {q.text || "Voice Synthesis Sequence"}
+                               {q.text || "Voice Question"}
                             </h4>
                           </div>
                           
@@ -292,17 +292,17 @@ export default function ResponsesDashboard() {
                             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-pink-600/[0.01] to-transparent pointer-events-none"></div>
                             {!answer || (!answer.audio_url && !answer.text) ? (
                               <div className="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-[0.1em] text-xs">
-                                <div className="w-2 h-2 rounded-full bg-amber-500/40"></div>
-                                Transmission Void (No Content)
-                              </div>
+                                 <div className="w-2 h-2 rounded-full bg-amber-500/40"></div>
+                                 No Answer Recorded
+                               </div>
                             ) : (
                               <div className="space-y-12">
                                 {answer.audio_url && (
                                   <div className="space-y-4">
                                     <div className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400 flex items-center gap-3">
-                                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                       Recorded Audio Signal
-                                    </div>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        Voice Recording
+                                     </div>
                                     <div className="scale-105 origin-left">
                                       <AudioPlayer src={answer.audio_url} compact />
                                     </div>
@@ -312,9 +312,9 @@ export default function ResponsesDashboard() {
                                 {answer.text && (
                                   <div className="space-y-4">
                                     <div className="text-[10px] font-black uppercase tracking-[0.25em] text-pink-400 flex items-center gap-3">
-                                       <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
-                                       Transcribed Intelligence
-                                    </div>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                                        Converted Text
+                                     </div>
                                     <div className="text-lg sm:text-2xl leading-relaxed font-black tracking-tight text-white/90 italic">
                                       "{answer.text}"
                                     </div>

@@ -99,7 +99,7 @@ export default function Home() {
 
         {/* Quick Activation Card */}
         <div className="glass-card p-10 sm:p-14 text-left mx-auto mb-32 relative border-white/5 rounded-[50px] shadow-premium group/create" style={{ maxWidth: '700px', animationDelay: '0.1s' }}>
-          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[11px] font-black px-6 py-2 rounded-2xl shadow-[0_0_20px_rgba(139,92,246,0.6)] tracking-[0.3em] uppercase italic">Deploy New Node</div>
+          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[11px] font-black px-6 py-2 rounded-2xl shadow-[0_0_20px_rgba(139,92,246,0.6)] tracking-[0.3em] uppercase italic">Create New Form</div>
           
           <div className="flex flex-col gap-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -108,7 +108,7 @@ export default function Home() {
                   htmlFor="form-title"
                   className="text-[11px] font-black text-violet-400 mb-2 block uppercase tracking-[0.25em]"
                 >
-                  01. Project Identifier
+                  01. Form Name
                 </label>
                 <input
                   id="form-title"
@@ -126,7 +126,7 @@ export default function Home() {
                   htmlFor="form-email"
                   className="text-[11px] font-black text-pink-400 mb-2 block uppercase tracking-[0.25em]"
                 >
-                  02. Intelligence Intel
+                  02. Alert Email
                 </label>
                 <input
                   id="form-email"
@@ -147,22 +147,22 @@ export default function Home() {
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <span className="relative flex items-center justify-center gap-5 uppercase italic">
-                {isCreating ? (
-                  <>
-                    <svg className="animate-spin" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
-                      <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                    </svg>
-                    Synthesizing...
-                  </>
-                ) : (
-                  <>
-                    Initialize Stream
-                    <svg className="group-hover:translate-x-3 transition-transform duration-700" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </>
-                )}
+                 {isCreating ? (
+                   <>
+                     <svg className="animate-spin" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                       <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                     </svg>
+                     Creating...
+                   </>
+                 ) : (
+                   <>
+                     Create Form
+                     <svg className="group-hover:translate-x-3 transition-transform duration-700" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                       <line x1="5" y1="12" x2="19" y2="12" />
+                       <polyline points="12 5 19 12 12 19" />
+                     </svg>
+                   </>
+                 )}
               </span>
             </button>
           </div>
@@ -172,14 +172,14 @@ export default function Home() {
         {recentForms.length > 0 && (
           <div className="mt-16 animate-fade-in text-left w-full border-t border-white/5 pt-24 pb-32">
             <div className="flex items-center justify-between mb-16 px-4">
-              <h2 className="text-3xl font-black tracking-tighter text-white flex items-center gap-6 uppercase italic">
-                <div className="w-16 h-1.5 bg-violet-600 rounded-full"></div>
-                Active Node Registry
-              </h2>
+               <h2 className="text-3xl font-black tracking-tighter text-white flex items-center gap-6 uppercase italic">
+                 <div className="w-16 h-1.5 bg-violet-600 rounded-full"></div>
+                 Your Forms
+               </h2>
               <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5">
-                <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                  {recentForms.length} Objects Live
-                </span>
+                 <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                   {recentForms.length} Forms Live
+                 </span>
               </div>
             </div>
             
@@ -196,14 +196,14 @@ export default function Home() {
                     <div className="flex flex-col flex-1 gap-10">
                       <div className="flex items-start justify-between">
                         <div className="flex-1 truncate pr-6">
-                           <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-3 block">Instance // 0{recentForms.length - i}</div>
+                            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-3 block">Form # 0{recentForms.length - i}</div>
                            <h3 className="font-black text-2xl sm:text-3xl text-white group-hover/project:italic-gradient-text transition-all truncate tracking-tighter uppercase italic leading-none">
                             {form.title}
                           </h3>
                           <div className="mt-5 flex items-center gap-4 text-slate-500 text-[10px] font-black uppercase tracking-widest">
                             <span className="flex items-center gap-2">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                              Synched {new Date(form.created_at).toLocaleDateString()}
+                               Created {new Date(form.created_at).toLocaleDateString()}
                             </span>
                           </div>
                         </div>
@@ -213,12 +213,12 @@ export default function Home() {
                       </div>
                       
                       <div className="flex flex-col sm:flex-row items-center gap-4">
-                         <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-14 rounded-2xl shadow-xl">
-                          Configure Node
-                        </Link>
-                        <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-14 rounded-2xl shadow-xl">
-                          Intelligence
-                        </Link>
+                          <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-14 rounded-2xl shadow-xl">
+                           Edit Form
+                         </Link>
+                         <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-14 rounded-2xl shadow-xl">
+                           View Results
+                         </Link>
                         <button 
                           onClick={() => handleDelete(form.id)}
                           className="btn-danger h-14 w-14 rounded-2xl shrink-0"
