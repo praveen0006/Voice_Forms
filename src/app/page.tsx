@@ -172,7 +172,7 @@ export default function Home() {
             >
               <div className="text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform cursor-default">{f.icon}</div>
               <div className="font-bold text-xs sm:text-sm mb-1">{f.label}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.65rem', sm: '0.75rem' }}>{f.desc}</div>
+              <div className="text-[10px] sm:text-xs" style={{ color: 'var(--text-muted)' }}>{f.desc}</div>
             </div>
           ))}
         </div>
