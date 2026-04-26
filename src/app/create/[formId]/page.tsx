@@ -129,7 +129,6 @@ export default function CreateFormPage() {
       const updated = prev.filter((q) => q.id !== id);
       return updated.map((q, i) => ({ ...q, order_index: i }));
     });
-    setIsSaved(false);
   }, []);
 
   // Handle header media upload
