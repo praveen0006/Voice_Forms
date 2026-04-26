@@ -476,17 +476,6 @@ export default function CreateFormPage() {
                         <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
                       </label>
 
-                      <label className="flex items-center gap-2 px-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={q.is_required}
-                          onChange={(e) => {
-                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
-                          }}
-                          className="w-3 h-3 accent-violet-500"
-                        />
-                        <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
-                      </label>
                   </div>
 
                   {/* Ordering */}
