@@ -302,9 +302,10 @@ export default function ResponsesDashboard() {
                                     onClick={() => {
                                       if (!answer.text) return;
                                       const utterance = new SpeechSynthesisUtterance(answer.text);
+                                      utterance.lang = 'en-US';
                                       // Premium feel: select a nice voice if available
                                       const voices = window.speechSynthesis.getVoices();
-                                      const premiumVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
+                                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium'))) || voices[0];
                                       if (premiumVoice) utterance.voice = premiumVoice;
                                       
                                       utterance.rate = 0.95; // Slightly slower for clarity

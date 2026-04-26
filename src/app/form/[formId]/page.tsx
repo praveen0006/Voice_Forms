@@ -143,9 +143,12 @@ export default function RespondFormPage() {
         }
 
         const utterance = new SpeechSynthesisUtterance(currentQ.text!);
-        // Higher quality voice selection
-        const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || voices[0];
-        if (premiumVoice) utterance.voice = premiumVoice;
+        utterance.lang = 'en-US'; // Force English
+        
+        // Higher quality voice selection specifically for English
+        const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                           voices.find(v => v.lang.startsWith('en')) || 
+                           voices[0];
         
         utterance.rate = 1.0;
         utterance.pitch = 1.0;
@@ -454,8 +457,11 @@ export default function RespondFormPage() {
                         return;
                       }
                       const utterance = new SpeechSynthesisUtterance(currentQ.text);
+                      utterance.lang = 'en-US';
                       const voices = window.speechSynthesis.getVoices();
-                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || voices[0];
+                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                                         voices.find(v => v.lang.startsWith('en')) || 
+                                         voices[0];
                       if (premiumVoice) utterance.voice = premiumVoice;
                       
                       console.log("Attempting manual AI speech for:", currentQ.text);
