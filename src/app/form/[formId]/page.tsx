@@ -30,7 +30,6 @@ export default function RespondFormPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [transcriptionLang, setTranscriptionLang] = useState('te-IN'); 
   const [isCurrentlyRecording, setIsCurrentlyRecording] = useState(false);
  
   // Load form and questions
@@ -103,7 +102,7 @@ export default function RespondFormPage() {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = transcriptionLang;
+      recognition.lang = 'en-US';
 
       recognition.onresult = (event: any) => {
         let transcript = '';
@@ -116,8 +115,7 @@ export default function RespondFormPage() {
           if (qId) {
             setAnswers((prev) => {
               const next = new Map(prev);
-              const existing = next.get(qId);
-              if (!existing) return prev;
+              const existing = next.get(qId)!;
               next.set(qId, { ...existing, text: transcript });
               return next;
             });
@@ -422,27 +420,9 @@ export default function RespondFormPage() {
                  <div className="p-8 sm:p-14 space-y-12">
                     {/* Voice answer */}
                     <div className="space-y-6">
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 text-[10px] font-black text-violet-400 uppercase tracking-[0.2em]">
-                          <span className="w-1 h-1 rounded-full bg-violet-500"></span>
-                          Voice capture mode
-                        </div>
-
-                        {/* Language Selector Debug Fix */}
-                        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/5">
-                          <button 
-                            onClick={() => setTranscriptionLang('en-US')}
-                            className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${transcriptionLang === 'en-US' ? 'bg-violet-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                          >
-                            English
-                          </button>
-                          <button 
-                            onClick={() => setTranscriptionLang('te-IN')}
-                            className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${transcriptionLang === 'te-IN' ? 'bg-violet-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                          >
-                            Telugu
-                          </button>
-                        </div>
+                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-violet-400 uppercase tracking-[0.2em]">
+                        <span className="w-1 h-1 rounded-full bg-violet-500"></span>
+                        Voice capture mode
                       </div>
                       <div className="flex flex-col items-center">
                         {currentAnswer.audioUrl ? (
