@@ -228,12 +228,13 @@ export default function RespondFormPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
-        <div className="text-center">
-          <svg className="animate-spin mx-auto mb-4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2.5">
-            <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-          </svg>
-          <p style={{ color: 'var(--text-muted)' }}>Loading form...</p>
+      <div className="min-h-screen flex items-center justify-center bg-tech-core">
+        <div className="flex flex-col items-center gap-8">
+          <div className="w-24 h-24 rounded-[32px] bg-gradient-to-br from-cyan-600 to-sky-500 animate-float flex items-center justify-center shadow-premium relative">
+            <div className="absolute inset-0 bg-white/20 blur-xl animate-pulse rounded-full"></div>
+            <div className="w-12 h-12 rounded-full border-4 border-white/20 border-t-white animate-spin relative z-10"></div>
+          </div>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-cyan-500 animate-pulse">Initializing Zenith...</p>
         </div>
       </div>
     );
@@ -369,7 +370,18 @@ export default function RespondFormPage() {
       )}
 
       {/* Question Card */}
-      {currentQ && (
+      {!currentQ ? (
+        <div className="glass-card p-14 sm:p-20 text-center flex flex-col items-center gap-8 border-white/5 shadow-premium rounded-[50px] animate-fade-in">
+          <div className="w-24 h-24 rounded-[32px] bg-white/5 flex items-center justify-center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-black uppercase tracking-tight text-white">Empty Horizon</h2>
+            <p className="text-sm text-slate-500 font-medium max-w-xs mx-auto">This form doesn't have any questions yet or is being initialized.</p>
+          </div>
+          <Link href="/" className="btn-secondary h-12 px-10 rounded-2xl text-[10px] uppercase font-black tracking-widest mt-4">Return Home</Link>
+        </div>
+      ) : (
         <div className="flex flex-col gap-10">
           <div className="glass-card p-10 sm:p-14 lg:p-20 relative overflow-hidden rounded-[50px] border-white/5 hover:border-emerald-500/20 transition-all duration-1000 shadow-premium" key={currentQ.id}>
              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-emerald-600/[0.03] to-transparent pointer-events-none"></div>
