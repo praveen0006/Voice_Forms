@@ -145,9 +145,9 @@ export default function RespondFormPage() {
         const utterance = new SpeechSynthesisUtterance(currentQ.text!);
         utterance.lang = 'te-IN'; // Force Telugu
         
-        // Higher quality voice selection specifically for English
-        const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
-                           voices.find(v => v.lang.startsWith('en')) || 
+        // Higher quality voice selection specifically for Telugu
+        const premiumVoice = voices.find(v => v.lang.startsWith('te') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                           voices.find(v => v.lang.startsWith('te')) || 
                            voices[0];
         
         utterance.rate = 1.0;
