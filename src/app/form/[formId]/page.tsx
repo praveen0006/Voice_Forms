@@ -30,6 +30,7 @@ export default function RespondFormPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [transcriptionLang, setTranscriptionLang] = useState('te-IN'); 
   const [isCurrentlyRecording, setIsCurrentlyRecording] = useState(false);
  
   // Load form and questions
@@ -102,7 +103,7 @@ export default function RespondFormPage() {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      recognition.lang = transcriptionLang;
 
       recognition.onresult = (event: any) => {
         let transcript = '';
@@ -115,8 +116,8 @@ export default function RespondFormPage() {
           if (qId) {
             setAnswers((prev) => {
               const next = new Map(prev);
-              const existing = next.get(qId)!;
-              // Only overwrite if text is empty or the user hasn't manually typed a lot
+              const existing = next.get(qId);
+              if (!existing) return prev;
               next.set(qId, { ...existing, text: transcript });
               return next;
             });
@@ -313,40 +314,35 @@ export default function RespondFormPage() {
   const isLastQuestion = currentQuestion === questions.length - 1;
 
   return (
-    <div className="animate-fade-in w-full pb-32">
+    <div className="animate-fade-in w-full pb-40">
       {/* Header Info */}
-      <div className="text-center mb-8 sm:mb-12">
-        <h1 className="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">{formTitle}</h1>
+      <div className="text-center mb-12 sm:mb-16">
+        <h1 className="text-3xl sm:text-5xl font-black mb-6 tracking-tight text-white uppercase italic">{formTitle}</h1>
         
-        <div className="flex items-center justify-center gap-3">
-          <div className="flex -space-x-2">
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex items-center gap-2.5">
             {questions.map((_, i) => (
               <div 
                 key={i} 
-                className={`w-2 h-2 rounded-full border border-bg-primary ${i <= currentQuestion ? 'bg-violet-500' : 'bg-white/10'}`} 
+                className={`h-1.5 rounded-full transition-all duration-700 ${i === currentQuestion ? 'w-10 bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.5)]' : 'w-1.5 bg-white/10'}`} 
               />
             ))}
           </div>
-          <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-            Step {currentQuestion + 1} of {questions.length}
-          </span>
-        </div>
-
-        {/* Improved Progress bar */}
-        <div className="w-full h-1.5 bg-white/5 rounded-full mt-6 overflow-hidden max-w-sm mx-auto border border-white/5">
-          <div
-            className="h-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-500 ease-out"
-            style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-          />
+          <div className="px-5 py-2 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-md">
+            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">
+              Sequence <span className="text-violet-400">0{currentQuestion + 1}</span> — 0{questions.length}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Dynamic Header Media Section */}
       {(headerVideoUrl || headerImageUrl) && currentQuestion === 0 && (
-        <div className="glass-card mb-10 overflow-hidden border-0 sm:border animate-fade-in shadow-2xl">
-          <div className="p-4 sm:p-5 bg-glass border-b border-subtle">
-             <h2 className="text-sm sm:text-base font-bold flex items-center gap-2">
-              <span className="text-xl">📽️</span> Form Context
+        <div className="glass-card mb-16 overflow-hidden border border-white/5 animate-fade-in shadow-premium rounded-[40px] group/hero">
+          <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 flex items-center justify-between">
+             <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white flex items-center gap-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+              Context Briefing
             </h2>
           </div>
           <div className="flex flex-col">
@@ -355,13 +351,13 @@ export default function RespondFormPage() {
                 <video 
                   src={headerVideoUrl} 
                   controls 
-                  className="w-full h-full max-h-[60vh] object-contain"
+                  className="w-full h-full max-h-[70vh] object-contain"
                   poster={headerImageUrl || undefined}
                 />
               </div>
             )}
             {headerImageUrl && (
-              <div className={`relative ${headerVideoUrl ? 'aspect-[21/9] border-t border-subtle' : 'aspect-video'}`}>
+              <div className={`relative ${headerVideoUrl ? 'aspect-[21/9] border-t border-white/5' : 'aspect-video'}`}>
                 <Image 
                   src={headerImageUrl} 
                   alt="Form Reference" 
@@ -376,107 +372,141 @@ export default function RespondFormPage() {
 
       {/* Question Card */}
       {currentQ && (
-        <div className="flex flex-col gap-6">
-          <div className="glass-card p-6 sm:p-10 relative overflow-hidden" key={currentQ.id}>
+        <div className="flex flex-col gap-10">
+          <div className="glass-card p-10 sm:p-14 lg:p-20 relative overflow-hidden rounded-[50px] border-white/5 hover:border-violet-500/20 transition-all duration-1000 shadow-premium" key={currentQ.id}>
+             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+             
              {/* Question Badge */}
-             <div className="mb-6 flex items-center justify-between">
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-violet-400">
-                  Question {currentQuestion + 1}
-                </span>
+             <div className="mb-10 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-6 bg-violet-600 rounded-full"></div>
+                  <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400">
+                    Incoming Prompt
+                  </span>
+                </div>
                 {!currentQ.is_required && (
-                  <span className="badge bg-white/5 text-white/40 border-none px-3">Optional</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 bg-white/5 px-4 py-1.5 rounded-full border border-white/5">Option Ref</span>
                 )}
              </div>
 
-            <div className="space-y-6">
+            <div className="space-y-10">
               {/* Text question */}
               {currentQ.text && (
-                <h2 className="text-xl sm:text-3xl font-bold leading-tight sm:leading-tight">
+                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-[1.1] sm:leading-[1.1] text-white tracking-tight text-balance">
                   {currentQ.text}
                 </h2>
               )}
 
               {/* Audio question */}
               {currentQ.audio_url && (
-                <div className="pt-2">
+                <div className="pt-4 scale-105 sm:scale-110 origin-left">
                   <AudioPlayer src={currentQ.audio_url} />
                 </div>
               )}
 
               {!currentQ.audio_url && !currentQ.text && (
-                <p className="text-muted italic">Question content missing.</p>
+                <p className="text-slate-500 italic font-medium uppercase tracking-[0.2em] text-sm">No Content Provided</p>
               )}
             </div>
           </div>
 
           {/* Answer Section */}
           {currentAnswer && (
-            <div className="glass-card overflow-hidden">
-               <div className="p-4 bg-glass border-b border-subtle text-xs font-bold uppercase tracking-widest text-center text-muted">
-                 Your Response
-               </div>
-               <div className="p-6 sm:p-10 space-y-8">
-                  {/* Voice answer */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-bold text-muted uppercase">
-                      <span>🎙️</span> Voice Response
-                    </div>
-                    {currentAnswer.audioUrl ? (
-                      <div className="space-y-4 animate-fade-in">
-                        <AudioPlayer src={currentAnswer.audioUrl} compact />
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() => removeAnswerAudio(currentQ.id)}
-                            className="text-xs font-bold text-muted underline decoration-white/10 hover:text-white transition-colors"
+            <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <div className="flex items-center justify-between mb-6 px-4">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Transmission Input</h3>
+                <div className="w-12 h-[1px] bg-white/5"></div>
+              </div>
+              
+              <div className="glass-card overflow-hidden rounded-[40px] border-white/5 shadow-premium">
+                 <div className="p-8 sm:p-14 space-y-12">
+                    {/* Voice answer */}
+                    <div className="space-y-6">
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 text-[10px] font-black text-violet-400 uppercase tracking-[0.2em]">
+                          <span className="w-1 h-1 rounded-full bg-violet-500"></span>
+                          Voice capture mode
+                        </div>
+
+                        {/* Language Selector Debug Fix */}
+                        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/5">
+                          <button 
+                            onClick={() => setTranscriptionLang('en-US')}
+                            className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${transcriptionLang === 'en-US' ? 'bg-violet-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
                           >
-                            Redo Voice
+                            English
+                          </button>
+                          <button 
+                            onClick={() => setTranscriptionLang('te-IN')}
+                            className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${transcriptionLang === 'te-IN' ? 'bg-violet-600 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                          >
+                            Telugu
                           </button>
                         </div>
                       </div>
-                    ) : (
-                      <AudioRecorder
-                        maxDuration={currentQ.max_duration || 300}
-                        onRecordingComplete={(blob) => handleAnswerRecording(currentQ.id, blob)}
-                        onRecordingStateChange={setIsCurrentlyRecording}
-                      />
-                    )}
-                  </div>
-
-                  {/* Divider */}
-                  <div className="relative h-[1px] bg-white/5 w-full flex items-center justify-center">
-                    <span className="bg-[#111638] px-4 text-[10px] font-black text-white/20">OR</span>
-                  </div>
-
-                  {/* Text answer */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-bold text-muted uppercase">
-                      <span>✍️</span> Text Response
+                      <div className="flex flex-col items-center">
+                        {currentAnswer.audioUrl ? (
+                          <div className="w-full space-y-6 animate-fade-in flex flex-col items-center">
+                            <div className="w-full max-w-lg">
+                              <AudioPlayer src={currentAnswer.audioUrl} compact />
+                            </div>
+                            <button
+                              onClick={() => removeAnswerAudio(currentQ.id)}
+                              className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors bg-white/5 px-6 py-2.5 rounded-2xl border border-white/5 hover:bg-white/10"
+                            >
+                              Reset Capture
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="scale-110">
+                            <AudioRecorder
+                              maxDuration={currentQ.max_duration || 300}
+                              onRecordingComplete={(blob) => handleAnswerRecording(currentQ.id, blob)}
+                              onRecordingStateChange={setIsCurrentlyRecording}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <textarea
-                      value={currentAnswer.text}
-                      onChange={(e) => updateAnswerText(currentQ.id, e.target.value)}
-                      placeholder="Share your thoughts here..."
-                      className="input-field min-h-[120px] sm:min-h-[160px] bg-transparent border-dashed"
-                    />
-                  </div>
-               </div>
+
+                    {/* Designer Divider */}
+                    <div className="relative h-[2px] bg-white/5 w-full flex items-center justify-center">
+                      <div className="absolute inset-x-0 h-[10px] bg-[#0a0e27]/80 backdrop-blur-sm -z-10"></div>
+                      <span className="bg-[#0a0e27] border border-white/10 px-6 py-1.5 rounded-full text-[11px] font-black text-white/40 tracking-[0.3em] italic uppercase">Hybrid</span>
+                    </div>
+
+                    {/* Text answer */}
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-center gap-3 text-[10px] font-black text-pink-400 uppercase tracking-[0.2em]">
+                        <span className="w-1 h-1 rounded-full bg-pink-500"></span>
+                        Manual Input (Optional fallback)
+                      </div>
+                      <textarea
+                        value={currentAnswer.text}
+                        onChange={(e) => updateAnswerText(currentQ.id, e.target.value)}
+                        placeholder="Speak to transcribe or type your response manually..."
+                        className="input-field min-h-[160px] sm:min-h-[220px] bg-white/[0.01] border-white/5 hover:bg-white/[0.03] transition-all py-8 px-10 text-lg font-bold leading-relaxed resize-none rounded-[32px] text-center italic tracking-tight"
+                      />
+                    </div>
+                 </div>
+              </div>
             </div>
           )}
         </div>
       )}
 
       {/* Navigation Controls - Sticky on Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-bg-primary via-bg-primary/95 to-transparent pb-8">
-        <div className="app-container max-w-2xl">
-          <div className="flex items-center gap-3 glass-card p-3 shadow-2xl border-t-white/10">
+      <div className="fixed bottom-0 left-0 right-0 z-[100] p-6 bg-gradient-to-t from-bg-primary via-bg-primary/95 to-transparent backdrop-blur-sm">
+        <div className="app-container max-w-3xl">
+          <div className="flex items-center gap-4 glass-card p-4 shadow-[0_-40px_100px_rgba(0,0,0,0.7)] border border-white/10 rounded-[35px] ring-1 ring-white/5">
             {/* Prev Button */}
             <button
               onClick={goToPrev}
               disabled={currentQuestion === 0 || isCurrentlyRecording}
-              className="btn-secondary h-14 sm:h-16 w-14 sm:w-16 rounded-2xl flex shrink-0 disabled:opacity-20 transition-all border-none bg-glass-strong hover:bg-white/10"
+              className="btn-secondary h-16 w-16 sm:h-20 sm:w-20 rounded-[28px] shrink-0 disabled:opacity-20 transition-all group"
               aria-label="Previous"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" className="group-hover:-translate-x-1 transition-transform">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
@@ -486,34 +516,44 @@ export default function RespondFormPage() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isCurrentlyRecording}
-                className="btn-primary flex-1 h-14 sm:h-16 rounded-2xl text-lg font-bold shadow-2xl disabled:opacity-50"
+                className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] disabled:opacity-50 relative overflow-hidden group"
               >
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 {isCurrentlyRecording ? (
-                  "Finish Recording First"
+                  "Finalizing Voice Stream..."
                 ) : isSubmitting ? (
-                  <div className="flex items-center gap-3">
-                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <div className="flex items-center gap-4">
+                    <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                       <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
                     </svg>
-                    Submitting...
+                    Transmitting...
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    Submit Response
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <div className="flex items-center gap-3">
+                    Transmit Response
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" className="group-hover:translate-x-1 transition-transform">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
                 )}
               </button>
             ) : (
-              <div className="flex-1 flex gap-2">
+              <div className="flex-1 flex gap-3">
                 <button
                   onClick={goToNext}
                   disabled={isCurrentlyRecording}
-                  className="btn-primary flex-1 h-14 sm:h-16 rounded-2xl text-lg font-bold shadow-2xl disabled:opacity-50 transition-all"
+                  className="btn-primary flex-1 h-16 sm:h-20 rounded-[28px] text-xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] disabled:opacity-50 transition-all relative overflow-hidden group"
                 >
-                  {isCurrentlyRecording ? 'Wait Content' : 'Next Question'}
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  {isCurrentlyRecording ? 'Processing Voice...' : (
+                    <div className="flex items-center gap-3">
+                      Proceed
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" className="group-hover:translate-x-2 transition-transform">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </div>
+                  )}
                 </button>
                 
                 {/* Skip for optional */}
@@ -521,7 +561,7 @@ export default function RespondFormPage() {
                    <button
                     onClick={goToNext}
                     disabled={isCurrentlyRecording}
-                    className="btn-secondary px-6 shrink-0 h-14 sm:h-16 rounded-2xl font-bold border-none"
+                    className="btn-secondary px-8 shrink-0 h-16 sm:h-20 rounded-[28px] font-black uppercase tracking-[0.2em] text-[10px]"
                   >
                     Skip
                   </button>
@@ -531,13 +571,11 @@ export default function RespondFormPage() {
           </div>
           
           {/* Branded Footer */}
-          <div className="mt-4 flex justify-center">
-            <a 
-              href="https://nexeraeco.vercel.app/" target="_blank" rel="noopener noreferrer"
-              className="text-[10px] font-black uppercase tracking-widest text-[#6366f1] hover:text-white transition-colors"
-            >
-              Powered by NexEraEco
-            </a>
+          <div className="mt-6 flex justify-center">
+            <div className="flex items-center gap-3 px-6 py-2 bg-white/5 rounded-full border border-white/5 backdrop-blur-md">
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Architecture by</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 italic">NexEraEco Core</span>
+            </div>
           </div>
         </div>
       </div>

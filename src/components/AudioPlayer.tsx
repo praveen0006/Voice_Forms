@@ -158,11 +158,12 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
 
   return (
     <div
-      className={`flex items-center gap-3 ${compact ? 'p-2' : 'p-3'}`}
+      className={`flex items-center gap-4 ${compact ? 'p-3' : 'p-4 sm:p-5'}`}
       style={{
-        background: 'var(--bg-glass)',
-        borderRadius: '12px',
-        border: '1px solid var(--border-subtle)',
+        background: 'rgba(255, 255, 255, 0.02)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(10px)',
       }}
     >
       <audio ref={audioRef} src={src} crossOrigin="anonymous" preload="metadata" />
@@ -170,57 +171,59 @@ export default function AudioPlayer({ src, compact = false }: AudioPlayerProps) 
       {/* Play/Pause Button */}
       <button
         onClick={togglePlay}
-        className="flex items-center justify-center shrink-0"
+        className="flex items-center justify-center shrink-0 shadow-lg hover:scale-105 active:scale-95 transition-all"
         style={{
-          width: compact ? '36px' : '40px',
-          height: compact ? '36px' : '40px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, var(--accent-violet), #6d28d9)',
+          width: compact ? '48px' : '56px',
+          height: compact ? '48px' : '56px',
+          borderRadius: '20px',
+          background: 'var(--primary-gradient)',
           border: 'none',
           cursor: 'pointer',
-          transition: 'all 0.2s',
           color: 'white',
         }}
         aria-label={isPlaying ? 'Pause' : 'Play'}
       >
         {isPlaying ? (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="6" y="4" width="4" height="16" rx="1" />
-            <rect x="14" y="4" width="4" height="16" rx="1" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="4" width="4" height="16" rx="2" />
+            <rect x="14" y="4" width="4" height="16" rx="2" />
           </svg>
         ) : (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '2px' }}>
-            <polygon points="6,3 20,12 6,21" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="ml-1">
+            <path d="M5 3.847a1 1 0 011.559-.832l14.464 7.933a1 1 0 010 1.664l-14.464 7.933A1 1 0 015 19.153V3.847z" />
           </svg>
         )}
       </button>
 
-      {/* Progress, Form & Time */}
-      <div className="flex-1 flex flex-col gap-1 w-full min-w-0">
-        <div style={{ height: '30px', width: '100%', opacity: isLoaded ? 1 : 0.4 }}>
+      {/* Progress & Waveform */}
+      <div className="flex-1 flex flex-col gap-2 w-full min-w-0">
+        <div style={{ height: '40px', width: '100%', opacity: isLoaded ? 1 : 0.2 }}>
           <canvas 
             ref={canvasRef} 
             width={400} 
-            height={60} 
+            height={80} 
             style={{ width: '100%', height: '100%', display: 'block' }} 
           />
         </div>
         
-        <input
-          type="range"
-          min="0"
-          max={duration || 0}
-          step="0.1"
-          value={currentTime}
-          onChange={handleSeek}
-          className="audio-progress"
-          style={{
-            background: `linear-gradient(to right, var(--accent-violet) ${progress}%, var(--bg-glass-strong) ${progress}%)`,
-          }}
-        />
-        <div className="flex justify-between" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-          <span>{formatTime(currentTime)}</span>
-          <span>{isLoaded ? formatTime(duration) : '...'}</span>
+        <div className="flex items-center gap-3">
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            step="0.01"
+            value={currentTime}
+            onChange={handleSeek}
+            className="audio-progress flex-1"
+            style={{
+              background: `linear-gradient(to right, var(--accent-violet) ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
+            }}
+          />
+          <div className="flex tabular-nums font-black text-[10px] tracking-widest text-slate-500 uppercase" style={{ minWidth: '70px', justifyContent: 'flex-end' }}>
+            <span>{formatTime(currentTime)}</span>
+            <span className="mx-1">/</span>
+            <span>{isLoaded ? formatTime(duration) : '0:00'}</span>
+          </div>
         </div>
       </div>
     </div>

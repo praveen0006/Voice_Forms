@@ -321,54 +321,64 @@ export default function CreateFormPage() {
   }
 
   return (
-    <div className="animate-fade-in w-full pb-20">
+    <div className="animate-fade-in w-full pb-32">
       {/* Form Title & Meta */}
-      <div className="mb-6 sm:mb-10">
-        <div className="flex flex-col gap-4">
+      <div className="mb-10 sm:mb-16 text-center">
+        <div className="flex flex-col items-center gap-4">
           <input
             type="text"
             value={title}
             onChange={(e) => { setTitle(e.target.value); }}
-            placeholder="Name your VoiceForm..."
-            className="input-field"
-            style={{ fontSize: '1.75rem', fontWeight: 800, padding: '16px 20px', border: 'none', background: 'transparent', borderBottom: '2px solid var(--border-subtle)', borderRadius: 0 }}
+            placeholder="Untitled VoiceForm"
+            className="w-full text-center bg-transparent text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight outline-none border-b-2 border-dashed border-white/5 focus:border-violet-500/50 transition-all py-4 uppercase"
+            style={{ color: 'var(--text-primary)' }}
           />
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }} className="px-1">
-            Build your form by adding audio questions below.
-          </p>
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-violet-500/10 rounded-full border border-violet-500/20">
+            <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-violet-400">Editor Mode Active</span>
+          </div>
         </div>
       </div>
 
       {/* Form Header Media Settings */}
-      <div className="glass-card mb-10 overflow-hidden border-0 sm:border">
-        <div className="p-4 sm:p-6 bg-glass border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-          <h3 className="text-sm sm:text-base font-bold flex items-center gap-2">
-            <span className="text-xl">📺</span> Header Context (Intro Section)
-          </h3>
-          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-            Show an intro video or image before respondents start the questions.
-          </p>
+      <div className="glass-card mb-12 overflow-hidden border-0 sm:border relative group/settings">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-transparent pointer-events-none"></div>
+        <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 backdrop-blur-md relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-black flex items-center gap-3 text-white uppercase tracking-tight">
+                <span className="bg-glass-strong p-2 rounded-xl text-xl">📺</span> Media Intro Context
+              </h3>
+              <p className="text-xs mt-1.5 font-medium text-slate-400">
+                Enhance your form with an introductory video or splash image.
+              </p>
+            </div>
+          </div>
         </div>
         
-        <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+        <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
           {/* Video Upload */}
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-              1. Intro Video
-            </label>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-violet-400">
+                01. Cinematic Intro (Video)
+              </label>
+              {headerVideoUrl && <span className="badge badge-success text-[9px]">Active</span>}
+            </div>
+            
             {headerVideoUrl ? (
-              <div className="relative rounded-xl overflow-hidden bg-black aspect-video shadow-2xl border" style={{ borderColor: 'var(--border-subtle)' }}>
+              <div className="relative rounded-2xl overflow-hidden bg-black aspect-video shadow-premium border border-white/5 group/media">
                 <video src={headerVideoUrl} controls className="w-full h-full" />
                 <button 
                   onClick={() => { setHeaderVideoUrl(null); }}
-                  className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95"
+                  className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-md hover:bg-red-600 text-white p-2.5 rounded-2xl shadow-xl transition-all scale-0 group-hover/media:scale-100 active:scale-95"
                   title="Remove Video"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
               </div>
             ) : (
-              <div className="relative group">
+              <div className="relative group/btn">
                 <input 
                   type="file" 
                   accept="video/*" 
@@ -379,39 +389,42 @@ export default function CreateFormPage() {
                 />
                 <label 
                   htmlFor="header-video-upload"
-                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 sm:p-12 cursor-pointer transition-all hover:bg-glass-strong hover:border-violet-500"
-                  style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-glass)' }}
+                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-10 sm:p-14 cursor-pointer transition-all bg-white/[0.02] border-white/10 hover:bg-violet-600/5 hover:border-violet-500/50"
                 >
-                  <div className="w-12 h-12 rounded-full bg-violet-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <span style={{ fontSize: '1.5rem' }}>📹</span>
+                  <div className="w-16 h-16 rounded-3xl bg-violet-600/10 flex items-center justify-center mb-5 group-hover/btn:scale-110 group-hover/btn:-rotate-3 transition-all duration-500">
+                    <span className="text-3xl">📹</span>
                   </div>
-                  <span className="text-sm font-semibold mb-1">
-                    {isUploadingMedia ? 'Uploading...' : 'Add Intro Video'}
+                  <span className="text-base font-black text-white uppercase tracking-tight">
+                    {isUploadingMedia ? 'Uploading...' : 'Drop Video Here'}
                   </span>
-                  <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>MP4, WEBM or MOV</span>
+                  <span className="text-[10px] mt-2 font-bold text-slate-500 uppercase tracking-widest">Supports 4K • WEBM • MP4</span>
                 </label>
               </div>
             )}
           </div>
 
           {/* Image Upload */}
-          <div className="flex flex-col gap-3">
-            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
-              2. Cover Image
-            </label>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-black uppercase tracking-[0.15em] text-violet-400">
+                02. High-Res Cover (Image)
+              </label>
+              {headerImageUrl && <span className="badge badge-success text-[9px]">Active</span>}
+            </div>
+
             {headerImageUrl ? (
-              <div className="relative rounded-xl overflow-hidden border bg-glass-strong aspect-video shadow-2xl" style={{ borderColor: 'var(--border-subtle)' }}>
+              <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-glass-strong aspect-video shadow-premium group/media">
                 <Image src={headerImageUrl} fill className="object-cover" alt="Header" />
                 <button 
                   onClick={() => { setHeaderImageUrl(null); }}
-                  className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95"
+                  className="absolute top-4 right-4 bg-red-500/80 backdrop-blur-md hover:bg-red-600 text-white p-2.5 rounded-2xl shadow-xl transition-all scale-0 group-hover/media:scale-100 active:scale-95"
                   title="Remove Image"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
               </div>
             ) : (
-              <div className="relative group">
+              <div className="relative group/btn">
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -422,16 +435,15 @@ export default function CreateFormPage() {
                 />
                 <label 
                   htmlFor="header-image-upload"
-                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 sm:p-12 cursor-pointer transition-all hover:bg-glass-strong hover:border-violet-500"
-                  style={{ borderColor: 'var(--border-subtle)', background: 'var(--bg-glass)' }}
+                  className="flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-10 sm:p-14 cursor-pointer transition-all bg-white/[0.02] border-white/10 hover:bg-pink-600/5 hover:border-pink-500/50"
                 >
-                  <div className="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <span style={{ fontSize: '1.5rem' }}>🖼️</span>
+                  <div className="w-16 h-16 rounded-3xl bg-pink-600/10 flex items-center justify-center mb-5 group-hover/btn:scale-110 group-hover/btn:rotate-3 transition-all duration-500">
+                    <span className="text-3xl">🖼️</span>
                   </div>
-                  <span className="text-sm font-semibold mb-1">
-                    {isUploadingMedia ? 'Uploading...' : 'Add Cover Image'}
+                  <span className="text-base font-black text-white uppercase tracking-tight">
+                    {isUploadingMedia ? 'Uploading...' : 'Drop Cover Here'}
                   </span>
-                  <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>JPG, PNG or WEBP</span>
+                  <span className="text-[10px] mt-2 font-bold text-slate-500 uppercase tracking-widest">Optimal aspect 16:9 • WEBP</span>
                 </label>
               </div>
             )}
@@ -440,150 +452,163 @@ export default function CreateFormPage() {
       </div>
 
       {/* Questions Section */}
-      <div className="flex flex-col gap-6 mb-10">
-        <h2 className="text-lg font-extrabold flex items-center gap-3 px-1">
-          <span className="text-2xl">📝</span> Questions ({questions.length})
-        </h2>
+      <div className="flex flex-col gap-10 mb-16">
+        <div className="flex items-center justify-between px-2">
+          <h2 className="text-2xl font-black text-white flex items-center gap-4 uppercase tracking-tighter italic">
+            <div className="w-10 h-1 bg-violet-500 rounded-full"></div>
+            Questions Pipeline
+          </h2>
+          <div className="text-xs font-black text-slate-500 uppercase tracking-widest">
+            {questions.length} Nodes
+          </div>
+        </div>
         
         {questions.map((q, index) => (
           <div
             key={q.id}
-            className="glass-card animate-fade-in group/card relative overflow-hidden"
+            className="group/card animate-fade-in relative"
             style={{ animationDelay: `${index * 0.05}s` }}
           >
-            {/* Side handle/status indicator */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 flex flex-col">
-              <div className={`flex-1 ${q.audioUrl ? 'bg-emerald-500' : 'bg-amber-500'} transition-colors`} />
-            </div>
-
-            <div className="p-4 sm:p-6 lg:p-8">
-              {/* Question Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-glass-strong flex items-center justify-center font-bold text-sm border border-subtle">
-                    {index + 1}
-                  </div>
-                  <span className="text-sm font-bold uppercase tracking-widest text-[#a78bfa]">
-                    Step {index + 1}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-                  {/* Settings dropdowns */}
-                  <div className="flex items-center gap-2 bg-glass rounded-xl p-1 border" style={{ borderColor: 'var(--border-subtle)' }}>
-                     <select
-                        value={q.max_duration || 300}
-                        onChange={(e) => {
-                          const val = parseInt(e.target.value);
-                          setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, max_duration: val } : pq));
-                        }}
-                        className="bg-transparent text-[10px] sm:text-xs font-bold uppercase p-1.5 outline-none cursor-pointer border-none"
-                      >
-                        <option value={30}>30s Limit</option>
-                        <option value={60}>1m Limit</option>
-                        <option value={120}>2m Limit</option>
-                        <option value={300}>5m Limit</option>
-                      </select>
-
-                      <div className="w-[1px] h-4 bg-white/10 mx-1" />
-
-                      <label className="flex items-center gap-2 px-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={q.is_required}
-                          onChange={(e) => {
-                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
-                          }}
-                          className="w-3 h-3 accent-violet-500"
-                        />
-                        <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
-                      </label>
-
-                  </div>
-
-                  {/* Ordering */}
-                  <div className="flex items-center bg-glass rounded-xl p-1 border" style={{ borderColor: 'var(--border-subtle)' }}>
-                    <button
-                      onClick={() => moveQuestion(index, 'up')}
-                      disabled={index === 0 || isCurrentlyRecording}
-                      className="p-1.5 hover:bg-glass-strong rounded-lg disabled:opacity-20 transition-colors"
-                      title="Move Up"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
-                    </button>
-                    <button
-                      onClick={() => moveQuestion(index, 'down')}
-                      disabled={index === questions.length - 1 || isCurrentlyRecording}
-                      className="p-1.5 hover:bg-glass-strong rounded-lg disabled:opacity-20 transition-colors"
-                      title="Move Down"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={() => deleteQuestion(q.id)}
-                    disabled={isCurrentlyRecording}
-                    className="p-1.5 hover:bg-red-500/20 text-red-400 rounded-xl transition-colors disabled:opacity-20"
-                    title="Delete Question"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Main Content Area */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Audio Recorder Column */}
-                <div className="flex flex-col gap-4 order-2 lg:order-1">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold uppercase flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-                      🎙️ Audio Prompt
-                    </label>
-                    {q.isUploading && (
-                      <span className="badge badge-uploading border-none bg-blue-500/10 text-blue-400">
-                        Uploading...
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="p-4 sm:p-6 bg-glass-strong rounded-2xl border border-subtle min-h-[120px] flex items-center justify-center">
-                    {q.audioUrl ? (
-                      <div className="w-full space-y-4">
-                        <AudioPlayer src={q.audioUrl} compact />
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() => removeAudio(q.id)}
-                            className="text-xs font-bold underline underline-offset-4 decoration-white/20 hover:text-white transition-colors"
-                          >
-                            Redo Recording
-                          </button>
-                        </div>
+            <div className="glass-card relative overflow-hidden border-0 sm:border border-white/5 transition-all duration-500 hover:border-violet-500/30 shadow-premium">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-600/5 to-transparent pointer-events-none"></div>
+              
+              <div className="p-6 sm:p-10 lg:p-12">
+                {/* Question Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
+                  <div className="flex items-center gap-5">
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center font-black text-xl text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                        {index + 1}
                       </div>
-                    ) : (
-                      <AudioRecorder
-                        onRecordingComplete={(blob) => handleRecordingComplete(q.id, blob)}
-                        onRecordingStateChange={setIsCurrentlyRecording}
-                      />
-                    )}
+                      <div className="absolute -inset-2 bg-violet-500/20 blur-xl rounded-full -z-10"></div>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 block mb-0.5">Step Sequence</span>
+                      <h3 className="text-lg font-black text-white uppercase italic tracking-tight leading-none">Voice Prompt Node</h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 overflow-x-auto pb-1 sm:pb-0">
+                    <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-[18px] border border-white/10">
+                       <select
+                          value={q.max_duration || 300}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, max_duration: val } : pq));
+                          }}
+                          className="bg-transparent text-[11px] font-black uppercase px-3 py-2 outline-none cursor-pointer border-none text-violet-300"
+                        >
+                          <option value={30}>30s TimeOut</option>
+                          <option value={60}>1m TimeOut</option>
+                          <option value={120}>2m TimeOut</option>
+                          <option value={300}>5m TimeOut</option>
+                        </select>
+
+                        <div className="w-[1px] h-4 bg-white/10 mx-1" />
+
+                        <label className="flex items-center gap-3 px-3 cursor-pointer group/toggle">
+                          <input
+                            type="checkbox"
+                            checked={q.is_required}
+                            onChange={(e) => {
+                              setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
+                            }}
+                            className="w-4 h-4 accent-violet-500 rounded cursor-pointer"
+                          />
+                          <span className="text-[11px] font-black uppercase tracking-widest text-slate-300 group-hover/toggle:text-white transition-colors">Mandatory</span>
+                        </label>
+                    </div>
+
+                    <div className="flex items-center bg-white/5 p-1.5 rounded-[18px] border border-white/10">
+                      <button
+                        onClick={() => moveQuestion(index, 'up')}
+                        disabled={index === 0 || isCurrentlyRecording}
+                        className="p-2 hover:bg-white/10 rounded-xl disabled:opacity-20 transition-all active:scale-90"
+                        title="Move Up"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="18 15 12 9 6 15"/></svg>
+                      </button>
+                      <button
+                        onClick={() => moveQuestion(index, 'down')}
+                        disabled={index === questions.length - 1 || isCurrentlyRecording}
+                        className="p-2 hover:bg-white/10 rounded-xl disabled:opacity-20 transition-all active:scale-90"
+                        title="Move Down"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"/></svg>
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => deleteQuestion(q.id)}
+                      disabled={isCurrentlyRecording}
+                      className="btn-danger p-3.5 rounded-2xl group transition-all"
+                      title="Destroy Node"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover:rotate-12 transition-transform">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
 
-                {/* Text Content Column */}
-                <div className="flex flex-col gap-4 order-1 lg:order-2">
-                  <label className="text-xs font-bold uppercase" style={{ color: 'var(--text-secondary)' }}>
-                    ✍️ Question Text
-                  </label>
-                  <textarea
-                    value={q.text}
-                    onChange={(e) => updateQuestionText(q.id, e.target.value)}
-                    placeholder="Enter the question text here..."
-                    className="input-field h-full min-h-[120px]"
-                    style={{ background: 'rgba(255,255,255,0.02)', borderStyle: 'dashed' }}
-                  />
-                  <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
-                    Tip: High-quality audio prompts work best, but text helps for accessibility.
-                  </p>
+                {/* Main Content Area */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                  {/* Audio Recorder Column */}
+                  <div className="flex flex-col gap-5 order-2 lg:order-1">
+                    <div className="flex items-center justify-between px-1">
+                      <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+                        Voice capture
+                      </label>
+                      {q.isUploading && (
+                        <div className="flex items-center gap-2 text-[9px] font-black text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20 uppercase tracking-widest">
+                          <span className="animate-pulse">Syncing to cloud</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-8 sm:p-10 bg-white/[0.03] rounded-[32px] border border-white/5 min-h-[160px] flex items-center justify-center relative overflow-hidden group/recorder">
+                      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+                      {q.audioUrl ? (
+                        <div className="w-full space-y-6 relative z-10">
+                          <AudioPlayer src={q.audioUrl} compact />
+                          <div className="flex justify-center">
+                            <button
+                              onClick={() => removeAudio(q.id)}
+                              className="btn-secondary h-10 px-8 rounded-full border-white/10 text-[10px] font-black uppercase tracking-widest transition-all"
+                            >
+                              Redo Capture
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="relative z-10 scale-110">
+                          <AudioRecorder
+                            onRecordingComplete={(blob) => handleRecordingComplete(q.id, blob)}
+                            onRecordingStateChange={setIsCurrentlyRecording}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Text Content Column */}
+                  <div className="flex flex-col gap-5 order-1 lg:order-2">
+                    <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-3 px-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                      Metadata Transcript
+                    </label>
+                    <textarea
+                      value={q.text}
+                      onChange={(e) => updateQuestionText(q.id, e.target.value)}
+                      placeholder="Type the question content here as a fallback..."
+                      className="input-field py-6 px-7 text-lg font-bold leading-relaxed border-white/5 bg-white/[0.01] hover:bg-white/[0.03] focus:bg-white/[0.03] h-full min-h-[180px] rounded-[32px] shadow-inner resize-none transition-all"
+                    />
+                    <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-2">
+                      💡 Use clear, concise text for optimal accessibility.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -594,80 +619,83 @@ export default function CreateFormPage() {
         <button
           onClick={addQuestion}
           disabled={isCurrentlyRecording}
-          className="btn-secondary group flex w-full py-8 text-lg font-bold border-2 border-dashed hover:border-violet-500 transition-all active:scale-[0.99] disabled:opacity-30 disabled:scale-100"
-          style={{ background: 'var(--bg-glass)', borderRadius: '24px' }}
+          className="group flex flex-col items-center justify-center w-full py-16 text-xl font-black border-2 border-dashed rounded-[40px] transition-all bg-white/[0.02] border-white/5 hover:border-violet-500/50 hover:bg-violet-500/[0.03] active:scale-[0.99] disabled:opacity-20"
         >
-          <div className="w-10 h-10 rounded-full bg-glass flex items-center justify-center group-hover:bg-violet-500 group-hover:scale-125 transition-all">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+          <div className="w-20 h-20 rounded-[28px] bg-white/5 flex items-center justify-center mb-6 group-hover:bg-violet-600 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-xl border border-white/5">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4">
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
           </div>
-          Add Your Next Question
+          <span className="uppercase tracking-[0.15em] text-white/50 group-hover:text-white transition-colors">Insert Next Step</span>
         </button>
       </div>
 
       {/* Floating Save Controls */}
-      <div className="fixed bottom-0 left-0 right-0 z-[100] p-4 bg-gradient-to-t from-bg-primary via-bg-primary/95 to-transparent">
-        <div className="app-container">
-          <div className="glass-card p-4 sm:p-6 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] border-t-accent/30 flex flex-col items-center gap-6">
+      <div className="fixed bottom-0 left-0 right-0 z-[100] p-6 bg-gradient-to-t from-bg-primary via-bg-primary/95 to-transparent backdrop-blur-sm">
+        <div className="app-container" style={{ maxWidth: '900px' }}>
+          <div className="glass-card p-4 sm:p-5 shadow-[0_-40px_100px_rgba(0,0,0,0.7)] border border-white/10 ring-1 ring-white/5 flex flex-col items-center gap-6 rounded-[32px]">
             {!shareUrl ? (
               <div className="flex w-full gap-4">
                 <button
                   onClick={saveForm}
                   disabled={isSaving || questions.length === 0 || isCurrentlyRecording}
-                  className={`btn-primary flex-1 py-4 text-lg font-bold shadow-2xl transition-all ${isSaving ? 'scale-95' : 'hover:scale-[1.02] active:scale-95'}`}
+                  className={`btn-primary flex-1 py-5 text-xl font-black tracking-tighter uppercase shadow-[0_10px_40px_rgba(139,92,246,0.3)] rounded-2xl group transition-all duration-500 ${isSaving ? 'scale-95' : 'hover:scale-[1.01] active:scale-95'}`}
                 >
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   {isCurrentlyRecording ? (
-                    "Stop Recording First"
+                    "End Capture Sequence First"
                   ) : isSaving ? (
-                    <>
-                      <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <div className="flex items-center gap-4">
+                      <svg className="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                         <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
                       </svg>
-                      Saving VoiceForm...
-                    </>
+                      Deploying...
+                    </div>
                   ) : (
-                    <>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <div className="flex items-center gap-4">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                         <polyline points="17 21 17 13 7 13 7 21"/>
                       </svg>
-                      Save & Publish Form
-                    </>
+                      Finalize & Deploy Form
+                    </div>
                   )}
                 </button>
                 <button
                   onClick={handleDeleteForm}
                   disabled={isSaving}
-                  className="btn-secondary px-6 py-4 rounded-2xl border-white/10 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400 group/del transition-all"
-                  title="Delete Form Permanently"
+                  className="btn-danger w-20 h-[72px] rounded-[24px] group/del transition-all"
+                  title="Purge VoiceForm"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover/del:scale-110 transition-transform">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover/del:scale-125 group-hover/del:rotate-12 transition-all duration-500">
                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                   </svg>
                 </button>
               </div>
             ) : (
               <div className="w-full flex flex-col md:flex-row items-center gap-4 animate-fade-in">
-                <div className="flex-1 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between gap-4 w-full overflow-hidden">
-                  <div className="flex items-center gap-3 truncate">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                <div className="flex-1 bg-emerald-500/5 border border-emerald-500/20 rounded-[28px] py-4 px-8 flex items-center justify-between gap-6 w-full group/link shadow-xl">
+                  <div className="flex items-center gap-4 truncate">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
-                    <span className="text-sm font-bold text-emerald-400 truncate tracking-tight">{shareUrl}</span>
+                    <div className="flex flex-col truncate">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500">Live Access Instance</span>
+                      <span className="text-base font-black text-emerald-400 truncate tracking-tight">{shareUrl}</span>
+                    </div>
                   </div>
                   <button
                     onClick={copyShareUrl}
-                    className="btn-secondary px-6 shrink-0 bg-transparent hover:bg-emerald-500/20 py-2 border-emerald-500/30"
+                    className="btn-secondary h-12 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest border-emerald-500/30 hover:border-emerald-500 transition-all shadow-xl shadow-emerald-500/5"
                   >
                     Copy Link
                   </button>
                 </div>
-                <Link href={shareUrl} target="_blank" className="btn-primary px-8 py-4 w-full md:w-auto text-nowrap rounded-2xl">
-                  Test Live Form
+                <Link href={shareUrl} target="_blank" className="btn-primary px-12 py-5 w-full md:w-auto text-nowrap rounded-[28px] font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)]">
+                  Test Live Flow
                 </Link>
               </div>
             )}

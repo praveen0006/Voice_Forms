@@ -70,171 +70,170 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-6 sm:py-12" style={{ minHeight: 'min-content' }}>
+    <div className="flex flex-col items-center justify-center py-12 sm:py-32 relative overflow-hidden" style={{ minHeight: 'min-content' }}>
       {/* Hero Section */}
-      <section className="text-center animate-slide-up w-full px-2 sm:px-0" style={{ maxWidth: '800px' }}>
-        {/* Icon */}
-        <div
-          className="mx-auto mb-6 sm:mb-8"
-          style={{
-            width: '72px',
-            height: '72px',
-            borderRadius: '20px',
-            background: 'linear-gradient(135deg, var(--accent-violet), var(--accent-pink))',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 50px var(--accent-violet-glow)',
-          }}
-        >
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="white">
-            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-          </svg>
+      <section className="text-center animate-slide-up w-full px-4 sm:px-0" style={{ maxWidth: '900px' }}>
+        {/* Animated Brand Node */}
+        <div className="relative mx-auto mb-16 group cursor-pointer animate-float">
+          <div className="absolute inset-0 bg-violet-600/40 blur-[50px] rounded-full group-hover:bg-violet-600/60 transition-all duration-1000"></div>
+          <div className="absolute -inset-4 border border-white/5 rounded-[40px] rotate-6 group-hover:rotate-0 transition-transform duration-700"></div>
+          <div className="absolute -inset-8 border border-white/5 rounded-[50px] -rotate-3 group-hover:rotate-0 transition-transform duration-1000 delay-100"></div>
+          <div
+            className="relative mx-auto w-24 h-24 sm:w-32 sm:h-32 rounded-[35px] bg-gradient-to-br from-[#8b5cf6] to-[#ec4899] flex items-center justify-center shadow-premium group-hover:scale-110 transition-all duration-700"
+          >
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="white shadow-2xl" className="sm:w-16 sm:h-16">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+              <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+            </svg>
+          </div>
         </div>
 
-        <h1 className="text-balance text-3xl sm:text-5xl md:text-6xl font-extrabold mb-4 sm:mb-6 leading-[1.1] tracking-tight">
-          Create forms with{' '}
-          <span className="gradient-text">your voice</span>
+        <h1 className="text-balance text-4xl sm:text-7xl lg:text-8xl font-black mb-8 leading-[0.95] tracking-tighter text-white uppercase italic">
+          Sculpted for<br />
+          <span className="italic-gradient-text drop-shadow-[0_0_40px_rgba(139,92,246,0.4)]">the user voice</span>
         </h1>
 
-        <p className="text-sm sm:text-xl mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto" style={{ color: '#cbd5e1' }}>
-          Record audio questions, share a link, and collect responses. 
-          Respondents listen and reply with voice or text — no login required.
+        <p className="text-xl sm:text-2xl mb-16 leading-relaxed max-w-2xl mx-auto font-black uppercase tracking-widest text-[#64748b] opacity-80">
+          Transforming standard surveys into <span className="text-white italic">high-fidelity</span> conversational experiences.
         </p>
 
-        {/* Create Form Card */}
-        <div className="glass-card p-5 sm:p-8 text-left mx-auto mb-10 overflow-hidden" style={{ maxWidth: '580px', animationDelay: '0.1s' }}>
-          <div className="flex flex-col gap-5">
-            <div>
-              <label
-                htmlFor="form-title"
-                style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-violet-light)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-              >
-                Form Name
-              </label>
-              <input
-                id="form-title"
-                type="text"
-                placeholder="e.g. Weekly Feedback, Quick Quiz..."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input-field"
-                autoFocus
-              />
-            </div>
+        {/* Quick Activation Card */}
+        <div className="glass-card p-10 sm:p-14 text-left mx-auto mb-32 relative border-white/5 rounded-[50px] shadow-premium group/create" style={{ maxWidth: '700px', animationDelay: '0.1s' }}>
+          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-violet-600 text-white text-[11px] font-black px-6 py-2 rounded-2xl shadow-[0_0_20px_rgba(139,92,246,0.6)] tracking-[0.3em] uppercase italic">Deploy New Node</div>
+          
+          <div className="flex flex-col gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <label
+                  htmlFor="form-title"
+                  className="text-[11px] font-black text-violet-400 mb-2 block uppercase tracking-[0.25em]"
+                >
+                  01. Project Identifier
+                </label>
+                <input
+                  id="form-title"
+                  type="text"
+                  placeholder="E.g. Product Feedback"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="input-field py-6 px-7 text-lg font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-3xl"
+                  autoFocus
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="form-email"
-                style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-violet-light)', marginBottom: '8px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-              >
-                Email Notifications (Optional)
-              </label>
-              <input
-                id="form-email"
-                type="email"
-                placeholder="Your email for alerts"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-                className="input-field"
-              />
+              <div className="space-y-4">
+                <label
+                  htmlFor="form-email"
+                  className="text-[11px] font-black text-pink-400 mb-2 block uppercase tracking-[0.25em]"
+                >
+                  02. Intelligence Intel
+                </label>
+                <input
+                  id="form-email"
+                  type="email"
+                  placeholder="alerts@nexera.io"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                  className="input-field py-6 px-7 text-lg font-black uppercase tracking-tight bg-white/[0.01] border-white/5 focus:bg-white/[0.03] transition-all rounded-3xl"
+                />
+              </div>
             </div>
 
             <button
               onClick={handleCreate}
               disabled={isCreating}
-              className="btn-primary w-full group"
+              className="btn-primary w-full h-24 text-2xl font-black tracking-tighter group relative overflow-hidden rounded-[32px] shadow-[0_20px_50px_rgba(139,92,246,0.3)] transition-all active:scale-95"
             >
-              {isCreating ? (
-                <>
-                  <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                  </svg>
-                  Initializing...
-                </>
-              ) : (
-                <>
-                  <svg className="group-hover:translate-x-1 transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                  </svg>
-                  Get Started for Free
-                </>
-              )}
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <span className="relative flex items-center justify-center gap-5 uppercase italic">
+                {isCreating ? (
+                  <>
+                    <svg className="animate-spin" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                      <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                    </svg>
+                    Synthesizing...
+                  </>
+                ) : (
+                  <>
+                    Initialize Stream
+                    <svg className="group-hover:translate-x-3 transition-transform duration-700" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </>
+                )}
+              </span>
             </button>
           </div>
         </div>
 
-        {/* Feature Highlights Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-16">
-          {[
-            { icon: '🎙️', label: 'Audio First', desc: 'True voice interaction' },
-            { icon: '🔗', label: 'Instant Share', desc: 'Magic link enabled' },
-            { icon: '🛡️', label: 'Private', desc: 'Secure voice data' },
-          ].map((f, i) => (
-            <div
-              key={i}
-              className="animate-fade-in group p-4 sm:p-6"
-              style={{
-                background: 'var(--bg-glass)',
-                borderRadius: '16px',
-                border: '1px solid var(--border-subtle)',
-                textAlign: 'center',
-                animationDelay: `${0.2 + i * 0.1}s`,
-                animationFillMode: 'backwards',
-              }}
-            >
-              <div className="text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform cursor-default">{f.icon}</div>
-              <div className="font-bold text-xs sm:text-sm mb-1">{f.label}</div>
-              <div className="text-[10px] sm:text-xs" style={{ color: 'var(--text-muted)' }}>{f.desc}</div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Recent Forms Section */}
+        {/* Global Registry Section */}
         {recentForms.length > 0 && (
-          <div className="mt-8 border-t pt-12 animate-fade-in text-left">
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '20px', color: 'var(--text-primary)' }}>
-              Recent Projects
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {recentForms.slice(0, 4).map((form) => (
-                <div key={form.id} className="glass-card p-5 group">
-                  <div className="flex flex-col h-full gap-4">
-                    <div>
-                      <div className="font-bold text-lg mb-1 group-hover:text-violet-400 transition-colors truncate">{form.title}</div>
-                      <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                        Created {new Date(form.created_at).toLocaleDateString()}
+          <div className="mt-16 animate-fade-in text-left w-full border-t border-white/5 pt-24 pb-32">
+            <div className="flex items-center justify-between mb-16 px-4">
+              <h2 className="text-3xl font-black tracking-tighter text-white flex items-center gap-6 uppercase italic">
+                <div className="w-16 h-1.5 bg-violet-600 rounded-full"></div>
+                Active Node Registry
+              </h2>
+              <div className="px-6 py-2 bg-white/5 rounded-full border border-white/5">
+                <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em]">
+                  {recentForms.length} Objects Live
+                </span>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {recentForms.slice(0, 6).map((form, i) => (
+                <div 
+                  key={form.id} 
+                  className="group/project animate-slide-up"
+                  style={{ animationDelay: `${0.2 + i * 0.1}s` }}
+                >
+                  <div className="glass-card p-10 sm:p-12 border-white/5 rounded-[45px] hover:border-violet-500/30 transition-all duration-700 shadow-premium relative overflow-hidden h-full flex flex-col">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+                    
+                    <div className="flex flex-col flex-1 gap-10">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 truncate pr-6">
+                           <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-3 block">Instance // 0{recentForms.length - i}</div>
+                           <h3 className="font-black text-2xl sm:text-3xl text-white group-hover/project:italic-gradient-text transition-all truncate tracking-tighter uppercase italic leading-none">
+                            {form.title}
+                          </h3>
+                          <div className="mt-5 flex items-center gap-4 text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                            <span className="flex items-center gap-2">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                              Synched {new Date(form.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-16 h-16 rounded-[24px] bg-white/[0.03] flex items-center justify-center shrink-0 border border-white/10 group-hover/project:bg-violet-600 transition-all duration-700 shadow-xl">
+                          <span className="text-2xl">🎙️</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                       <Link href={`/create/${form.id}`} className="btn-secondary flex-1 py-2 text-xs flex items-center justify-center gap-1 group/edit">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                        Edit
-                      </Link>
-                      <Link href={`/responses/${form.id}`} className="btn-primary flex-1 py-2 text-xs text-nowrap flex items-center justify-center gap-1">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Responses
-                      </Link>
-                      <button 
-                        onClick={() => handleDelete(form.id)}
-                        className="btn-secondary w-[36px] min-w-[36px] flex-none py-2 text-xs hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all active:scale-90"
-                        title="Delete Form"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                      </button>
+                      
+                      <div className="flex flex-col sm:flex-row items-center gap-4">
+                         <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-14 rounded-2xl shadow-xl">
+                          Configure Node
+                        </Link>
+                        <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-14 rounded-2xl shadow-xl">
+                          Intelligence
+                        </Link>
+                        <button 
+                          onClick={() => handleDelete(form.id)}
+                          className="btn-danger h-14 w-14 rounded-2xl shrink-0"
+                          title="Purge Object"
+                        >
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="transition-transform group-hover/project:rotate-12 group-hover/project:scale-110">
+                            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            {recentForms.length > 4 && (
-              <p className="mt-4 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
-                And {recentForms.length - 4} other forms saved locally.
-              </p>
-            )}
           </div>
         )}
       </section>

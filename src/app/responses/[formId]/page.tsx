@@ -156,41 +156,44 @@ export default function ResponsesDashboard() {
   return (
     <div className="animate-fade-in w-full">
       {/* Header Info */}
-      <div className="mb-10 sm:mb-12">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-1">
-          <div className="space-y-2">
+      <div className="mb-12 sm:mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 px-2">
+          <div className="space-y-6">
             <Link 
               href="/" 
-              className="text-xs font-black uppercase tracking-widest text-violet-500 hover:text-violet-400 flex items-center gap-2 mb-4 group"
+              className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-[0.25em] text-violet-400 hover:text-white transition-all group shadow-xl"
             >
               <svg className="group-hover:-translate-x-1 transition-transform" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
-              All projects
+              Global Dashboard
             </Link>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">{form.title}</h1>
-            <div className="flex items-center gap-3">
-              <span className="badge badge-success border-none bg-emerald-500/10 text-emerald-500 font-bold px-3 py-1">
-                {respondents.length} {respondents.length === 1 ? 'Response' : 'Responses'}
-              </span>
-              <span className="text-xs font-bold text-muted uppercase tracking-widest">
-                Analytics Dashboard
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tighter text-white uppercase italic italic-gradient-text">{form.title}</h1>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2.5 px-4 py-2 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-[11px] font-black tracking-[0.1em] text-emerald-500 uppercase">
+                  {respondents.length} ACTIVE {respondents.length === 1 ? 'Submission' : 'Submissions'}
+                </span>
+              </div>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] italic">
+                Data Intel Core v1.4
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Link 
               href={`/create/${form.id}`} 
-              className="btn-secondary px-6 h-12 flex items-center justify-center rounded-xl font-bold bg-glass-strong border-none hover:bg-white/10"
+              className="btn-secondary h-16 px-10 rounded-2xl"
             >
-              Edit Setup
+              Adjust Node
             </Link>
             <Link 
               href={`/form/${form.id}`} 
-              className="btn-primary px-6 h-12 flex items-center justify-center rounded-xl font-bold"
+              className="btn-primary px-10 h-16 flex items-center justify-center rounded-2xl font-black uppercase tracking-tighter shadow-[0_10px_40px_rgba(139,92,246,0.3)] active:scale-95"
             >
-              Share Live
+              Access Link
             </Link>
           </div>
         </div>
@@ -198,124 +201,141 @@ export default function ResponsesDashboard() {
 
       {/* Responses List */}
       {respondents.length === 0 ? (
-        <div className="glass-card p-16 text-center shadow-2xl">
-          <div className="w-20 h-20 rounded-full bg-glass mx-auto flex items-center justify-center mb-6">
-            <span className="text-4xl">📬</span>
+        <div className="glass-card p-20 sm:p-32 text-center shadow-premium border-white/5 rounded-[60px] animate-fade-in relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.03] to-transparent pointer-events-none"></div>
+          <div className="w-24 h-24 rounded-[32px] bg-white/5 mx-auto flex items-center justify-center mb-10 border border-white/5 shadow-inner">
+            <span className="text-5xl">📡</span>
           </div>
-          <h3 className="text-xl font-bold mb-2">Awaiting your first response</h3>
-          <p className="text-muted text-sm max-w-xs mx-auto mb-8">
-            Once people starts sharing their voice, their recorded responses will appear here instantly.
+          <h3 className="text-2xl sm:text-3xl font-black mb-4 uppercase tracking-tighter italic text-white">Signal Discovery Pending</h3>
+          <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] max-w-sm mx-auto mb-12 leading-relaxed">
+            Scanning for incoming voice transmissions. Share your unique access point to begin capture.
           </p>
-          <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 inline-block text-xs font-bold text-emerald-400 tracking-tight">
-             Link: voiceform.app/form/{formId}
+          <div className="p-5 bg-violet-500/5 rounded-[28px] border border-violet-500/10 inline-flex items-center gap-4 text-xs font-black text-violet-400 tracking-tighter group hover:border-violet-500/30 transition-all cursor-pointer">
+             <span className="text-slate-600 uppercase tracking-[0.2em] font-medium mr-2">Endpoint //</span>
+             voiceform.app/form/{formId}
           </div>
         </div>
       ) : (
-        <div className="space-y-12">
+        <div className="space-y-16">
           {respondents.map((respondent, index) => (
             <div 
               key={respondent.response.id} 
-              className="glass-card p-0 overflow-hidden animate-slide-up shadow-2xl border-0 sm:border" 
+              className="group/card animate-slide-up relative" 
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {/* Respondent Header */}
-              <div className="p-4 sm:p-6 bg-glass border-b border-subtle flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg">
-                    {respondents.length - index}
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-sm sm:text-base tracking-tight">
-                      Respondent #{respondents.length - index}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted mt-0.5">
-                      Completed {new Date(respondent.response.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                    </p>
-                  </div>
-                </div>
+              <div className="glass-card overflow-hidden border-0 sm:border border-white/5 shadow-premium rounded-[50px] transition-all duration-700 hover:border-violet-500/20">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-violet-600/[0.02] to-transparent pointer-events-none"></div>
                 
-                <button
-                  onClick={() => handleDeleteResponse(respondent.response.id)}
-                  disabled={isDeleting === respondent.response.id}
-                  className={`p-3 rounded-xl transition-all group ${isDeleting === respondent.response.id ? 'opacity-20' : 'hover:bg-red-500/10 text-muted hover:text-red-500'}`}
-                  title="Purge Response"
-                >
-                  {isDeleting === respondent.response.id ? (
-                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                      <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                    </svg>
-                  ) : (
-                    <svg className="group-hover:scale-110 transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M3 6h18"></path>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                    </svg>
-                  )}
-                </button>
-              </div>
-
-              {/* Answers Grid */}
-              <div className="p-6 sm:p-10 divide-y divide-white/5 space-y-10">
-                {questions.map((q, qIndex) => {
-                  const answer = respondent.answers[q.id];
-                  
-                  return (
-                    <div key={q.id} className="pt-10 first:pt-0 space-y-4">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-3">
-                           <div className="text-[10px] font-black w-5 h-5 rounded-md bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-muted">
-                              {qIndex + 1}
-                           </div>
-                           <span className="text-xs font-black uppercase tracking-[0.2em] text-[#a78bfa]">
-                            Question
-                           </span>
-                        </div>
-                        <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white/90">
-                          {q.text || "Audio question prompt"}
-                        </h4>
+                {/* Respondent Header */}
+                <div className="p-8 sm:p-10 bg-white/[0.02] border-b border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-8">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-3xl bg-violet-600 flex items-center justify-center text-white font-black text-2xl shadow-[0_0_30px_rgba(139,92,246,0.3)] group-hover/card:scale-110 group-hover/card:-rotate-3 transition-all duration-700">
+                        {respondents.length - index}
                       </div>
-                      
-                      <div className="p-6 bg-glass-strong rounded-3xl border border-white/5 shadow-inner">
-                        {!answer || (!answer.audio_url && !answer.text) ? (
-                          <div className="flex items-center gap-2 text-muted italic text-sm">
-                            <span className="text-xl">🚫</span> No response provided.
-                          </div>
-                        ) : (
-                          <div className="space-y-6">
-                            {answer.audio_url && (
-                              <div className="space-y-2">
-                                <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                   Voice Recorded
-                                </div>
-                                <AudioPlayer src={answer.audio_url} compact />
-                              </div>
-                            )}
-                            
-                            {answer.text && (
-                              <div className="space-y-2">
-                                <div className="text-[10px] font-bold uppercase tracking-widest text-violet-400">
-                                   Text Response
-                                </div>
-                                <div className="text-base sm:text-lg leading-relaxed font-medium text-white/80">
-                                  {answer.text}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                      <div className="absolute -inset-2 bg-violet-500/10 blur-xl rounded-full -z-10 group-hover/card:opacity-100 opacity-0 transition-opacity"></div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400 mb-1">Transmission Object</div>
+                      <h3 className="text-xl sm:text-2xl font-black text-white italic uppercase tracking-tighter leading-none">
+                        Respondent Sequence #{respondents.length - index}
+                      </h3>
+                      <div className="flex items-center gap-3 mt-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">{new Date(respondent.response.created_at).toLocaleString([], { dateStyle: 'medium' })}</span>
+                        <div className="w-1 h-1 rounded-full bg-white/10"></div>
+                        <span className="text-[11px] font-black text-violet-500/80 uppercase tracking-widest leading-none">{new Date(respondent.response.created_at).toLocaleTimeString([], { timeStyle: 'short' })}</span>
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                  
+                  <button
+                    onClick={() => handleDeleteResponse(respondent.response.id)}
+                    disabled={isDeleting === respondent.response.id}
+                    className="btn-danger h-16 w-16 rounded-2xl group/del transition-all"
+                    title="Purge Object"
+                  >
+                    {isDeleting === respondent.response.id ? (
+                      <svg className="animate-spin" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                        <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                      </svg>
+                    ) : (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="group-hover/del:scale-110 group-hover/del:rotate-12 transition-transform">
+                        <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    )}
+                  </button>
+                </div>
+
+                {/* Answers Grid */}
+                <div className="p-8 sm:p-14 lg:p-20 space-y-20">
+                  {questions.map((q, qIndex) => {
+                    const answer = respondent.answers[q.id];
+                    
+                    return (
+                      <div key={q.id} className="relative group/node animate-fade-in">
+                        <div className="flex flex-col gap-6">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-4">
+                               <div className="text-[11px] font-black w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-slate-400 group-hover/node:bg-violet-600 transition-colors">
+                                  {qIndex + 1}
+                               </div>
+                               <span className="text-[11px] font-black uppercase tracking-[0.25em] text-violet-400/80">
+                                 Question Prompt
+                               </span>
+                            </div>
+                            <h4 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white/95 leading-tight italic">
+                              {q.text || "Voice Synthesis Sequence"}
+                            </h4>
+                          </div>
+                          
+                          <div className="p-8 sm:p-12 bg-white/[0.01] rounded-[40px] border border-white/5 shadow-inner hover:bg-white/[0.02] transition-colors relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-pink-600/[0.01] to-transparent pointer-events-none"></div>
+                            {!answer || (!answer.audio_url && !answer.text) ? (
+                              <div className="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-[0.1em] text-xs">
+                                <div className="w-2 h-2 rounded-full bg-amber-500/40"></div>
+                                Transmission Void (No Content)
+                              </div>
+                            ) : (
+                              <div className="space-y-12">
+                                {answer.audio_url && (
+                                  <div className="space-y-4">
+                                    <div className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400 flex items-center gap-3">
+                                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                       Recorded Audio Signal
+                                    </div>
+                                    <div className="scale-105 origin-left">
+                                      <AudioPlayer src={answer.audio_url} compact />
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {answer.text && (
+                                  <div className="space-y-4">
+                                    <div className="text-[10px] font-black uppercase tracking-[0.25em] text-pink-400 flex items-center gap-3">
+                                       <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                                       Transcribed Intelligence
+                                    </div>
+                                    <div className="text-lg sm:text-2xl leading-relaxed font-black tracking-tight text-white/90 italic">
+                                      "{answer.text}"
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
       
-      {/* Bottom padding */}
-      <div className="h-32" />
+      {/* Footer Buffer */}
+      <div className="h-40" />
     </div>
   );
 }
