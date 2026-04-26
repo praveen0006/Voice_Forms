@@ -53,6 +53,22 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this form and all its responses? This cannot be undone.')) return;
+    
+    try {
+      const { error } = await supabase.from('forms').delete().eq('id', id);
+      if (error) throw error;
+      
+      const updated = recentForms.filter(f => f.id !== id);
+      setRecentForms(updated);
+      localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
+    } catch (e) {
+      console.error('Delete error:', e);
+      alert('Failed to delete form');
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-6 sm:py-12" style={{ minHeight: 'min-content' }}>
       {/* Hero Section */}
@@ -194,15 +210,21 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                      <Link href={`/form/${form.id}`} className="btn-secondary flex-1 py-2 text-xs">
-                        View
-                      </Link>
-                      <Link href={`/create/${form.id}`} className="btn-secondary flex-1 py-2 text-xs">
+                       <Link href={`/create/${form.id}`} className="btn-secondary flex-1 py-2 text-xs flex items-center justify-center gap-1 group/edit">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                         Edit
                       </Link>
-                      <Link href={`/responses/${form.id}`} className="btn-primary flex-1 py-2 text-xs text-nowrap">
+                      <Link href={`/responses/${form.id}`} className="btn-primary flex-1 py-2 text-xs text-nowrap flex items-center justify-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                         Responses
                       </Link>
+                      <button 
+                        onClick={() => handleDelete(form.id)}
+                        className="btn-secondary w-[36px] min-w-[36px] flex-none py-2 text-xs hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all active:scale-90"
+                        title="Delete Form"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      </button>
                     </div>
                   </div>
                 </div>

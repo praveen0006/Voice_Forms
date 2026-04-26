@@ -183,6 +183,29 @@ export default function CreateFormPage() {
     });
   }, []);
 
+  const handleDeleteForm = async () => {
+    if (!confirm('Are you sure you want to delete this entire form? All questions and responses will be permanently removed.')) return;
+    
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.from('forms').delete().eq('id', formId);
+      if (error) throw error;
+      
+      // Update local storage
+      const saved = localStorage.getItem('voiceform_my_forms');
+      if (saved) {
+        const parsed = JSON.parse(saved) as any[];
+        const updated = parsed.filter(f => f.id !== formId);
+        localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
+      }
+      
+      router.push('/');
+    } catch (e) {
+      console.error('Delete error:', e);
+      alert('Failed to delete form');
+      setIsSaving(false);
+    }
+  };
 
   // Save form
   const saveForm = async () => {
@@ -589,30 +612,42 @@ export default function CreateFormPage() {
         <div className="app-container">
           <div className="glass-card p-4 sm:p-6 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] border-t-accent/30 flex flex-col items-center gap-6">
             {!shareUrl ? (
-               <button
-                onClick={saveForm}
-                disabled={isSaving || questions.length === 0 || isCurrentlyRecording}
-                className={`btn-primary w-full max-w-lg py-4 text-lg font-bold shadow-2xl transition-all ${isSaving ? 'scale-95' : 'hover:scale-[1.02] active:scale-95'}`}
-              >
-                {isCurrentlyRecording ? (
-                  "Stop Recording First"
-                ) : isSaving ? (
-                  <>
-                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                      <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-                    </svg>
-                    Saving VoiceForm...
-                  </>
-                ) : (
-                  <>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                      <polyline points="17 21 17 13 7 13 7 21"/>
-                    </svg>
-                    Save & Publish Form
-                  </>
-                )}
-              </button>
+              <div className="flex w-full gap-4">
+                <button
+                  onClick={saveForm}
+                  disabled={isSaving || questions.length === 0 || isCurrentlyRecording}
+                  className={`btn-primary flex-1 py-4 text-lg font-bold shadow-2xl transition-all ${isSaving ? 'scale-95' : 'hover:scale-[1.02] active:scale-95'}`}
+                >
+                  {isCurrentlyRecording ? (
+                    "Stop Recording First"
+                  ) : isSaving ? (
+                    <>
+                      <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
+                      </svg>
+                      Saving VoiceForm...
+                    </>
+                  ) : (
+                    <>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                      </svg>
+                      Save & Publish Form
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleDeleteForm}
+                  disabled={isSaving}
+                  className="btn-secondary px-6 py-4 rounded-2xl border-white/10 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400 group/del transition-all"
+                  title="Delete Form Permanently"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover/del:scale-110 transition-transform">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
             ) : (
               <div className="w-full flex flex-col md:flex-row items-center gap-4 animate-fade-in">
                 <div className="flex-1 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex items-center justify-between gap-4 w-full overflow-hidden">
