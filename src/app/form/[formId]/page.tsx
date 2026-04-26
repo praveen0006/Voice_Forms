@@ -343,22 +343,22 @@ export default function RespondFormPage() {
               Information
             </h2>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-6 sm:gap-10">
             {headerVideoUrl && (
-              <div className="aspect-video bg-black flex items-center justify-center">
+              <div className="aspect-video glass-card overflow-hidden shadow-2xl border-white/5 bg-black/20">
                 <video 
                   src={headerVideoUrl} 
                   controls 
-                  className="w-full h-full max-h-[70vh] object-contain"
+                  className="w-full h-full object-contain"
                   poster={headerImageUrl || undefined}
                 />
               </div>
             )}
             {headerImageUrl && (
-              <div className={`relative ${headerVideoUrl ? 'aspect-[21/9] border-t border-white/5' : 'aspect-video'}`}>
+              <div className="aspect-video glass-card overflow-hidden shadow-2xl border-white/5">
                 <Image 
                   src={headerImageUrl} 
-                  alt="Form Reference" 
+                  alt="Reference Image" 
                   fill
                   className="object-cover"
                 />

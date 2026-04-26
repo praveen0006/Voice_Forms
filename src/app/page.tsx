@@ -163,18 +163,18 @@ export default function Home() {
                         </h3>
                       </div>
                       
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-11 sm:h-12 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] shadow-premium font-black uppercase">
+                      <div className="flex items-center gap-4 w-full">
+                        <Link href={`/create/${form.id}`} className="btn-primary flex-1 h-12 rounded-2xl text-[10px] shadow-premium font-black uppercase text-center flex items-center justify-center">
                           Settings
                         </Link>
-                        <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-11 sm:h-12 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] shadow-xl font-black uppercase">
+                        <Link href={`/responses/${form.id}`} className="btn-secondary flex-1 h-12 rounded-2xl text-[10px] shadow-xl font-black uppercase text-center flex items-center justify-center">
                           Check
                         </Link>
                         <button 
                           onClick={() => handleDelete(form.id)}
-                          className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl border border-white/5 flex items-center justify-center hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0"
+                          className="h-12 w-12 rounded-2xl border border-white/5 flex items-center justify-center hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0 bg-white/5"
                         >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="sm:w-[18px] sm:h-[18px]"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>
                       </div>
                     </div>
