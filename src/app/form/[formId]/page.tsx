@@ -431,7 +431,8 @@ export default function RespondFormPage() {
                    </div>
                    <button 
                     onClick={() => {
-                      const utterance = new SpeechSynthesisUtterance(currentQ.text!);
+                      if (!currentQ.text) return;
+                      const utterance = new SpeechSynthesisUtterance(currentQ.text);
                       const voices = window.speechSynthesis.getVoices();
                       const premiumVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
                       if (premiumVoice) utterance.voice = premiumVoice;

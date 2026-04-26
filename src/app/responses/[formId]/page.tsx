@@ -300,6 +300,7 @@ export default function ResponsesDashboard() {
                                   </div>
                                   <button
                                     onClick={() => {
+                                      if (!answer.text) return;
                                       const utterance = new SpeechSynthesisUtterance(answer.text);
                                       // Premium feel: select a nice voice if available
                                       const voices = window.speechSynthesis.getVoices();
