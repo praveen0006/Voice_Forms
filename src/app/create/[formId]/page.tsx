@@ -119,6 +119,12 @@ export default function CreateFormPage() {
           setQuestions(prev => prev.map(pq => pq.id === id ? { ...pq, text: transcript } : pq));
         }
       };
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error === 'not-allowed') {
+          console.warn('Microphone permission denied for transcription');
+        }
+      };
       recognition.start();
     }
   }, []);
@@ -197,6 +203,18 @@ export default function CreateFormPage() {
     if (emptyQs.length > 0) {
       alert(`Please provide text or an audio recording for all questions before saving.\n\nMissing content for questions: ${emptyQs.join(', ')}`);
       return;
+    }
+
+    // New AI Voice Validation
+    const missingAIText = [];
+    for (let i = 0; i < questions.length; i++) {
+        if (questions[i].is_ai_voice && (!questions[i].text || !questions[i].text.trim())) {
+            missingAIText.push(i + 1);
+        }
+    }
+    if (missingAIText.length > 0) {
+        alert(`Questions ${missingAIText.join(', ')} have "AI Voice" enabled but no text. \n\nPlease type the question text so the AI has something to speak!`);
+        return;
     }
 
     setIsSaving(true);

@@ -437,16 +437,28 @@ export default function RespondFormPage() {
 
               {currentQ.is_ai_voice && (
                  <div className="pt-2 flex items-center gap-3">
-                   <div className="badge border-none bg-pink-500/10 text-pink-400 font-black tracking-widest text-[10px] animate-pulse">
-                     AI Voice Active
-                   </div>
+                   <button 
+                     onClick={() => {
+                       const voices = window.speechSynthesis.getVoices();
+                       const msg = `AI Status:\n- Text: ${currentQ.text || 'EMPTY (Needs text!)'}\n- Voices Found: ${voices.length}\n- Speaking: ${window.speechSynthesis.speaking}`;
+                       alert(msg);
+                     }}
+                     className="badge border-none bg-pink-500/10 text-pink-400 font-black tracking-widest text-[10px] animate-pulse cursor-help"
+                   >
+                     AI Voice Active (Tap for Status)
+                   </button>
                    <button 
                     onClick={() => {
-                      if (!currentQ.text) return;
+                      if (!currentQ.text) {
+                        alert("Cannot play AI Voice: No text found for this question. Please add text in the form builder.");
+                        return;
+                      }
                       const utterance = new SpeechSynthesisUtterance(currentQ.text);
                       const voices = window.speechSynthesis.getVoices();
-                      const premiumVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
+                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || voices[0];
                       if (premiumVoice) utterance.voice = premiumVoice;
+                      
+                      console.log("Attempting manual AI speech for:", currentQ.text);
                       window.speechSynthesis.cancel();
                       window.speechSynthesis.speak(utterance);
                     }}
