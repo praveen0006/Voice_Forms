@@ -448,7 +448,6 @@ export default function CreateFormPage() {
                           checked={q.is_required}
                           onChange={(e) => {
                             setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
-                            setIsSaved(false);
                           }}
                           className="w-3 h-3 accent-violet-500"
                         />
