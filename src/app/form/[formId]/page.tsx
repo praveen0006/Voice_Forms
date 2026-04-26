@@ -143,7 +143,7 @@ export default function RespondFormPage() {
         }
 
         const utterance = new SpeechSynthesisUtterance(currentQ.text!);
-        utterance.lang = 'en-US'; // Force English
+        utterance.lang = 'te-IN'; // Force Telugu
         
         // Higher quality voice selection specifically for English
         const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
@@ -457,12 +457,12 @@ export default function RespondFormPage() {
                         return;
                       }
                       const utterance = new SpeechSynthesisUtterance(currentQ.text);
-                      utterance.lang = 'en-US';
+                      utterance.lang = 'te-IN'; // Forced Telugu
                       const voices = window.speechSynthesis.getVoices();
-                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
-                                         voices.find(v => v.lang.startsWith('en')) || 
+                      const teluguVoice = voices.find(v => v.lang.startsWith('te')) || 
+                                         voices.find(v => v.lang.startsWith('hi')) || 
                                          voices[0];
-                      if (premiumVoice) utterance.voice = premiumVoice;
+                      if (teluguVoice) utterance.voice = teluguVoice;
                       
                       console.log("Attempting manual AI speech for:", currentQ.text);
                       window.speechSynthesis.cancel();
