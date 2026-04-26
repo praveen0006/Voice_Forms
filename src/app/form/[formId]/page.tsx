@@ -131,43 +131,6 @@ export default function RespondFormPage() {
     }
   }, [isCurrentlyRecording, currentQuestion, questions]);
 
-  // AI Voice Autoplay for Owner's Questions
-  useEffect(() => {
-    const currentQ = questions[currentQuestion];
-    if (currentQ?.is_ai_voice && currentQ.text && !loading) {
-      const speak = () => {
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length === 0 && !window.speechSynthesis.onvoiceschanged) {
-          window.speechSynthesis.onvoiceschanged = speak;
-          return;
-        }
-
-        const isTelugu = /[\u0C00-\u0C7F]/.test(currentQ.text!);
-        const utterance = new SpeechSynthesisUtterance(currentQ.text!);
-        utterance.lang = isTelugu ? 'te-IN' : 'en-US';
-        
-        // Dynamic voice selection based on detected language
-        const voicesList = window.speechSynthesis.getVoices();
-        const targetLang = isTelugu ? 'te' : 'en';
-        const bestVoice = voicesList.find(v => v.lang.startsWith(targetLang) && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
-                         voicesList.find(v => v.lang.startsWith(targetLang)) || 
-                         voicesList[0];
-        if (bestVoice) utterance.voice = bestVoice;
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
-      };
-
-      // Try speaking immediately
-      speak();
-      
-      // Safety: Sometimes browsers need one more try after a tiny delay
-      const timeout = setTimeout(speak, 500);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentQuestion, questions, loading]);
 
   // Remove answer audio
   const removeAnswerAudio = useCallback((questionId: string) => {
@@ -434,54 +397,10 @@ export default function RespondFormPage() {
               )}
 
               {/* Audio question */}
-              {currentQ.audio_url && !currentQ.is_ai_voice && (
+              {currentQ.audio_url && (
                 <div className="pt-2">
                   <AudioPlayer src={currentQ.audio_url} />
                 </div>
-              )}
-
-              {currentQ.is_ai_voice && (
-                 <div className="pt-2 flex items-center gap-3">
-                   <button 
-                     onClick={() => {
-                       const voices = window.speechSynthesis.getVoices();
-                       const msg = `AI Status:\n- Text: ${currentQ.text || 'EMPTY (Needs text!)'}\n- Voices Found: ${voices.length}\n- Speaking: ${window.speechSynthesis.speaking}`;
-                       alert(msg);
-                     }}
-                     className="badge border-none bg-pink-500/10 text-pink-400 font-black tracking-widest text-[10px] animate-pulse cursor-help"
-                   >
-                     AI Voice Active (Tap for Status)
-                   </button>
-                   <button 
-                    onClick={() => {
-                      if (!currentQ.text) {
-                        alert("Cannot play AI Voice: No text found for this question. Please add text in the form builder.");
-                        return;
-                      }
-                      const isTelugu = /[\u0C00-\u0C7F]/.test(currentQ.text);
-                      const utterance = new SpeechSynthesisUtterance(currentQ.text);
-                      utterance.lang = isTelugu ? 'te-IN' : 'en-US';
-                      
-                      const voices = window.speechSynthesis.getVoices();
-                      const targetLang = isTelugu ? 'te' : 'en';
-                      const bestVoice = voices.find(v => v.lang.startsWith(targetLang) && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
-                                       voices.find(v => v.lang.startsWith(targetLang)) || 
-                                       voices[0];
-                      if (bestVoice) utterance.voice = bestVoice;
-                      
-                      console.log("Attempting manual AI speech for:", currentQ.text);
-                      window.speechSynthesis.cancel();
-                      window.speechSynthesis.speak(utterance);
-                    }}
-                    className="p-2 rounded-full hover:bg-white/5 transition-colors text-white/40 hover:text-white"
-                   >
-                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                       <path d="M11 5L6 9H2V15H6L11 19V5Z" />
-                       <path d="M19.07 4.93C20.94 6.81 22 9.32 22 12C22 14.68 20.94 17.19 19.07 19.07" />
-                       <path d="M15.54 8.46C16.47 9.4 17 10.66 17 12C17 13.34 16.47 14.6 15.54 15.54" />
-                     </svg>
-                   </button>
-                 </div>
               )}
 
               {!currentQ.audio_url && !currentQ.text && (

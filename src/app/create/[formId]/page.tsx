@@ -205,18 +205,6 @@ export default function CreateFormPage() {
       return;
     }
 
-    // New AI Voice Validation
-    const missingAIText = [];
-    for (let i = 0; i < questions.length; i++) {
-        if (questions[i].is_ai_voice && (!questions[i].text || !questions[i].text.trim())) {
-            missingAIText.push(i + 1);
-        }
-    }
-    if (missingAIText.length > 0) {
-        alert(`Questions ${missingAIText.join(', ')} have "AI Voice" enabled but no text. \n\nPlease type the question text so the AI has something to speak!`);
-        return;
-    }
-
     setIsSaving(true);
 
     try {
@@ -488,33 +476,17 @@ export default function CreateFormPage() {
                         <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
                       </label>
 
-                      <div className="w-[1px] h-4 bg-white/10 mx-1" />
-
-                      <label className="flex items-center gap-2 px-2 cursor-pointer group/ai">
+                      <label className="flex items-center gap-2 px-2 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={q.is_ai_voice}
+                          checked={q.is_required}
                           onChange={(e) => {
-                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_ai_voice: e.target.checked } : pq));
+                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_required: e.target.checked } : pq));
                           }}
-                          className="w-3 h-3 accent-pink-500"
+                          className="w-3 h-3 accent-violet-500"
                         />
-                        <span className={`text-[10px] sm:text-xs font-bold uppercase ${q.is_ai_voice ? 'text-pink-400' : ''}`}>AI Voice</span>
+                        <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
                       </label>
-
-                      {q.text && q.is_ai_voice && (
-                        <button
-                          onClick={() => {
-                            const utterance = new SpeechSynthesisUtterance(q.text);
-                            window.speechSynthesis.cancel();
-                            window.speechSynthesis.speak(utterance);
-                          }}
-                          className="p-1.5 hover:bg-white/10 rounded-lg text-pink-400 flex items-center justify-center transition-all active:scale-90"
-                          title="Preview AI Voice"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M11 5L6 9H2V15H6L11 19V5Z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
-                        </button>
-                      )}
                   </div>
 
                   {/* Ordering */}
