@@ -16,61 +16,53 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-mesh min-h-screen flex flex-col" suppressHydrationWarning={true}>
-        {/* Top nav bar */}
-        <nav
-          style={{
-            position: 'sticky',
-            top: 0,
-            zIndex: 50,
-            background: 'rgba(10, 14, 39, 0.8)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid var(--border-subtle)',
+        <header 
+          className="sticky top-0 z-50 backdrop-blur-md border-b"
+          style={{ 
+            background: 'rgba(10, 14, 39, 0.7)', 
+            borderColor: 'var(--border-subtle)' 
           }}
         >
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {/* Logo */}
-              <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, var(--accent-violet), var(--accent-pink))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+          <div className="app-container h-16 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 no-underline group hover:opacity-90 transition-opacity">
+              <div 
+                className="p-2 rounded-xl group-hover:scale-110 transition-transform"
+                style={{ background: 'linear-gradient(135deg, var(--accent-violet), var(--accent-pink))' }}
+              >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                   <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
                   <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
                 </svg>
               </div>
-              <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+              <span className="font-extrabold text-xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
                 Voice<span className="gradient-text">Form</span>
               </span>
             </Link>
+            
+            <nav className="flex items-center gap-4">
+              <Link 
+                href="/privacy" 
+                className="text-xs sm:text-sm font-medium no-underline hover:text-white transition-colors"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Privacy
+              </Link>
+            </nav>
           </div>
-        </nav>
+        </header>
 
-        {/* Main content */}
-        <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px', flex: '1 0 auto' }}>
-          {children}
+        <main className="flex-1 py-8 sm:py-12 px-2 sm:px-4">
+          <div className="app-container">
+            {children}
+          </div>
         </main>
         
-        {/* Footer */}
-        <footer style={{
-          textAlign: 'center',
-          padding: '24px',
-          marginTop: 'auto',
-          borderTop: '1px solid var(--border-subtle)',
-          color: 'var(--text-muted)',
-          fontSize: '0.9rem',
-        }}>
-          <p>
-            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> VoiceForm. All rights reserved. •{' '}
-            <Link href="/privacy" style={{ color: 'var(--text-secondary)', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
-              Privacy & Terms
-            </Link>
-          </p>
+        <footer className="py-8 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+          <div className="app-container text-center">
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              © <span suppressHydrationWarning>{new Date().getFullYear()}</span> Voice<span className="font-bold">Form</span>. All rights reserved.
+            </p>
+          </div>
         </footer>
       </body>
     </html>

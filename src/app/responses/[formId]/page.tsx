@@ -154,110 +154,152 @@ export default function ResponsesDashboard() {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      {/* Header */}
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '4px' }}>{form.title}</h1>
-          <p style={{ color: 'var(--text-muted)' }}>
-            {respondents.length} {respondents.length === 1 ? 'Response' : 'Responses'}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link href={`/create/${form.id}`} className="btn-secondary" style={{ textDecoration: 'none', padding: '8px 16px', fontSize: '0.9rem' }}>
-            Edit Form
-          </Link>
-          <Link href={`/form/${form.id}`} className="btn-primary" style={{ textDecoration: 'none', padding: '8px 16px', fontSize: '0.9rem' }}>
-            Share Link
-          </Link>
+    <div className="animate-fade-in w-full">
+      {/* Header Info */}
+      <div className="mb-10 sm:mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-1">
+          <div className="space-y-2">
+            <Link 
+              href="/" 
+              className="text-xs font-black uppercase tracking-widest text-violet-500 hover:text-violet-400 flex items-center gap-2 mb-4 group"
+            >
+              <svg className="group-hover:-translate-x-1 transition-transform" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              All projects
+            </Link>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">{form.title}</h1>
+            <div className="flex items-center gap-3">
+              <span className="badge badge-success border-none bg-emerald-500/10 text-emerald-500 font-bold px-3 py-1">
+                {respondents.length} {respondents.length === 1 ? 'Response' : 'Responses'}
+              </span>
+              <span className="text-xs font-bold text-muted uppercase tracking-widest">
+                Analytics Dashboard
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link 
+              href={`/create/${form.id}`} 
+              className="btn-secondary px-6 h-12 flex items-center justify-center rounded-xl font-bold bg-glass-strong border-none hover:bg-white/10"
+            >
+              Edit Setup
+            </Link>
+            <Link 
+              href={`/form/${form.id}`} 
+              className="btn-primary px-6 h-12 flex items-center justify-center rounded-xl font-bold"
+            >
+              Share Live
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Responses List */}
       {respondents.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <div style={{ fontSize: '3rem', marginBottom: '16px', opacity: 0.5 }}>📭</div>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '8px' }}>No responses yet</h3>
-          <p style={{ color: 'var(--text-muted)' }}>
-            Share your form link to start collecting voice responses!
+        <div className="glass-card p-16 text-center shadow-2xl">
+          <div className="w-20 h-20 rounded-full bg-glass mx-auto flex items-center justify-center mb-6">
+            <span className="text-4xl">📬</span>
+          </div>
+          <h3 className="text-xl font-bold mb-2">Awaiting your first response</h3>
+          <p className="text-muted text-sm max-w-xs mx-auto mb-8">
+            Once people starts sharing their voice, their recorded responses will appear here instantly.
           </p>
+          <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 inline-block text-xs font-bold text-emerald-400 tracking-tight">
+             Link: voiceform.app/form/{formId}
+          </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-8">
+        <div className="space-y-12">
           {respondents.map((respondent, index) => (
-            <div key={respondent.response.id} className="glass-card p-0 overflow-hidden animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+            <div 
+              key={respondent.response.id} 
+              className="glass-card p-0 overflow-hidden animate-slide-up shadow-2xl border-0 sm:border" 
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {/* Respondent Header */}
-              <div style={{ background: 'var(--bg-glass-strong)', padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>
-                    Respondent #{respondents.length - index}
-                  </h3>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    {new Date(respondent.response.created_at).toLocaleString()}
-                  </span>
+              <div className="p-4 sm:p-6 bg-glass border-b border-subtle flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg">
+                    {respondents.length - index}
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-sm sm:text-base tracking-tight">
+                      Respondent #{respondents.length - index}
+                    </h3>
+                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted mt-0.5">
+                      Completed {new Date(respondent.response.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                    </p>
+                  </div>
                 </div>
                 
                 <button
                   onClick={() => handleDeleteResponse(respondent.response.id)}
                   disabled={isDeleting === respondent.response.id}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: isDeleting === respondent.response.id ? 'not-allowed' : 'pointer',
-                    color: 'var(--accent-pink)',
-                    opacity: isDeleting === respondent.response.id ? 0.5 : 0.8,
-                    padding: '8px',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'opacity 0.2s'
-                  }}
-                  title="Delete Response"
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = isDeleting === respondent.response.id ? '0.5' : '0.8'}
+                  className={`p-3 rounded-xl transition-all group ${isDeleting === respondent.response.id ? 'opacity-20' : 'hover:bg-red-500/10 text-muted hover:text-red-500'}`}
+                  title="Purge Response"
                 >
                   {isDeleting === respondent.response.id ? (
-                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                       <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
                     </svg>
                   ) : (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="group-hover:scale-110 transition-transform" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M3 6h18"></path>
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                       <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
                     </svg>
                   )}
                 </button>
               </div>
 
-              {/* Answers */}
-              <div className="p-6 flex flex-col gap-6">
+              {/* Answers Grid */}
+              <div className="p-6 sm:p-10 divide-y divide-white/5 space-y-10">
                 {questions.map((q, qIndex) => {
                   const answer = respondent.answers[q.id];
                   
                   return (
-                    <div key={q.id}>
-                      <div className="mb-2">
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent-violet)', marginRight: '8px' }}>
-                          Q{qIndex + 1}.
-                        </span>
-                        <span style={{ fontWeight: 500 }}>
-                          {q.text || "Audio Question"}
-                        </span>
+                    <div key={q.id} className="pt-10 first:pt-0 space-y-4">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-3">
+                           <div className="text-[10px] font-black w-5 h-5 rounded-md bg-white/5 flex items-center justify-center shrink-0 border border-white/5 text-muted">
+                              {qIndex + 1}
+                           </div>
+                           <span className="text-xs font-black uppercase tracking-[0.2em] text-[#a78bfa]">
+                            Question
+                           </span>
+                        </div>
+                        <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white/90">
+                          {q.text || "Audio question prompt"}
+                        </h4>
                       </div>
                       
-                      <div className="pl-6" style={{ borderLeft: '2px solid var(--border-subtle)' }}>
+                      <div className="p-6 bg-glass-strong rounded-3xl border border-white/5 shadow-inner">
                         {!answer || (!answer.audio_url && !answer.text) ? (
-                          <p style={{ fontStyle: 'italic', color: 'var(--text-muted)', fontSize: '0.9rem' }}>No answer provided.</p>
+                          <div className="flex items-center gap-2 text-muted italic text-sm">
+                            <span className="text-xl">🚫</span> No response provided.
+                          </div>
                         ) : (
-                          <div className="flex flex-col gap-3 mt-3">
+                          <div className="space-y-6">
                             {answer.audio_url && (
-                              <AudioPlayer src={answer.audio_url} compact />
+                              <div className="space-y-2">
+                                <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                   Voice Recorded
+                                </div>
+                                <AudioPlayer src={answer.audio_url} compact />
+                              </div>
                             )}
+                            
                             {answer.text && (
-                              <div style={{ background: 'var(--bg-glass-strong)', padding: '12px 16px', borderRadius: '8px', fontSize: '0.95rem' }}>
-                                {answer.text}
+                              <div className="space-y-2">
+                                <div className="text-[10px] font-bold uppercase tracking-widest text-violet-400">
+                                   Text Response
+                                </div>
+                                <div className="text-base sm:text-lg leading-relaxed font-medium text-white/80">
+                                  {answer.text}
+                                </div>
                               </div>
                             )}
                           </div>
@@ -273,7 +315,7 @@ export default function ResponsesDashboard() {
       )}
       
       {/* Bottom padding */}
-      <div style={{ height: '80px' }} />
+      <div className="h-32" />
     </div>
   );
 }

@@ -1,24 +1,22 @@
-# VoiceForm 🎙️
+# VoiceForm 🎙️ — Audio-First Form Builder
 
-VoiceForm is an audio-first form builder designed to capture responses natively through voice. Create custom forms with audio questions, share unique links, and let respondents reply using their microphone directly from their browser—no accounts required!
+VoiceForm is a premium, audio-first form builder designed to capture high-fidelity voice responses natively. Create custom forms with audio questions, share unique links, and let respondents listen and reply using their microphone directly from their browser—no accounts required and fully optimized for all devices.
 
-## ✨ Features
-- **Audio-First Flow:** Record questions with your voice and accept audio answers.
-- **Header Context Media:** Add demonstration videos and reference images to your forms to provide context to respondents.
-- **Dynamic Real-Time Waveforms:** Built-in WebAudio API canvas visualizer that reacts to your voice.
-- **Smart Validation:** Optional vs. Required questions with real-time validation.
-- **Per-Question Time Limits:** Control answer lengths (e.g., 30s vs 5m) per individual question.
-- **Frictionless Experience:** All forms are strictly URL-based. No user logic, authentication walls, or friction—just record and share.
-- **Automated Email Notifications:** Supabase Database Webhooks wired to Deno Edge Functions dispatch instant email alerts on new submissions.
-- **Mobile Responsive:** Crafted elegantly using Tailwind CSS v4 glassmorphism to look pristine on mobile.
-- **Serverless Backend:** Built purely on Supabase Postgres and Storage buckets.
+## ✨ Latest Features (V2.0)
+- **Premium UX Redesign:** Overhauled UI with glassmorphism, smooth micro-animations, and a "mesh-gradient" aesthetic.
+- **Mobile-First Responsive System:** Dedicated sticky navigation for mobile respondents and optimized touch targets for easier one-handed use.
+- **Intelligent Save Logic:** Optimized "Upsert" logic in the builder that prevents data loss for existing respondent answers during form edits.
+- **Header Context Media:** Support for both intro videos and cover images to provide rich context before questions start.
+- **Secure Context Handling:** Graceful fallback and user guidance for microphone access in non-HTTPS environments (mobile safety).
+- **Per-Question Precision:** Individual time limits (30s to 5m) and requirement toggles for every question.
+- **Real-Time Visualization:** Optimized waveform canvas visualizers for both the builder and the respondent interface.
 
 ## 🛠️ Tech Stack
 - **Framework:** Next.js 15 (App Router)
-- **Styling:** Tailwind CSS v4
-- **Database Backend:** Supabase Postgres
-- **Storage:** Supabase Storage (WebM Audio, MP4, JPEG)
-- **Edge Functions:** Deno runtime on Supabase (Resend Email API)
+- **Styling:** Tailwind CSS + Vanilla CSS Variables (Custom Mobile-First Design System)
+- **Database:** Supabase Postgres
+- **Storage:** Supabase Storage (Audio WebM, Media Uploads)
+- **Edge Runtime:** Supabase Edge Functions (Resend Email API)
 
 ## 🚀 Getting Started
 
@@ -34,32 +32,33 @@ VoiceForm is an audio-first form builder designed to capture responses natively 
    ```
 
 3. **Set up environment variables:**
-   Create a `.env.local` file with your Supabase keys:
+   Create a `.env.local` file with your Supabase credentials:
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
 
-4. **Prepare the Database:**
-   Run the following SQL in your Supabase SQL Editor:
-   ```sql
-   -- Core Tables
-   -- (Run contents of supabase_migration.sql)
+4. **Database Setup:**
+   Run the SQL provided in `supabase_migration.sql` in your Supabase SQL Editor. This includes:
+   - `forms` (title, media_urls, notification_email)
+   - `questions` (audio_url, text, order, validation)
+   - `responses` & `answers` (mapping audio captures to submissions)
 
-   -- Latest Feature Updates (Dynamic Media & Validation)
-   ALTER TABLE forms ADD COLUMN IF NOT EXISTS header_video_url TEXT;
-   ALTER TABLE forms ADD COLUMN IF NOT EXISTS header_image_url TEXT;
-   ALTER TABLE questions ADD COLUMN IF NOT EXISTS is_required BOOLEAN NOT NULL DEFAULT true;
-   ALTER TABLE questions ADD COLUMN IF NOT EXISTS max_duration INTEGER DEFAULT 300;
-   ```
-
-5. **Run the development server:**
+5. **Development:**
    ```bash
    npm run dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   Open [http://localhost:3000](http://localhost:3000) to see the builder.
 
-## 🔔 Enabling Email Notifications
-1. Ensure you have the `notification_email` column configured in your Supabase `forms` table.
-2. Deploy the `send-email-alert` Edge Function.
-3. Configure your `RESEND_API_KEY` in your Supabase Edge Function Secrets.
+## 🔒 Security & Privacy
+- **Secure Recording:** Microphone access requires HTTPS. Ensure your deployment (Vercel/Netlify) is SSL-enabled. For local mobile testing, use `ngrok` or similar secure tunnels.
+- **Audio Privacy:** Recordings are stored in private storage buckets, only accessible via unique form IDs.
+
+## 🎨 Design Philosophy
+VoiceForm follows an **Audio-First** philosophy. We believe that voice capture shouldn't be a secondary feature—it should be the core interaction. Our design focuses on:
+1. **Low Friction:** No login for respondents.
+2. **Visual Feedback:** Waveforms that make audio feel "tangible".
+3. **Accessibility:** Fallback text for every audio prompt.
+
+---
+*Created with ❤️ by the VoiceForm Team (Powered by NexEraEco)*
