@@ -96,7 +96,7 @@ export default function RespondFormPage() {
     if (!isCurrentlyRecording) return;
 
     try {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       if (!SpeechRecognition) return;
 
       const recognition = new SpeechRecognition();
@@ -104,6 +104,7 @@ export default function RespondFormPage() {
       recognition.interimResults = true;
       recognition.lang = 'en-US';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognition.onresult = (event: any) => {
         let transcript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -316,7 +317,7 @@ export default function RespondFormPage() {
     <div className="animate-fade-in w-full pb-40">
       {/* Header Info */}
       <div className="text-center mb-12 sm:mb-16">
-        <h1 className="text-3xl sm:text-5xl font-black mb-6 tracking-tight text-white uppercase italic">{formTitle}</h1>
+        <h1 className="text-3xl sm:text-5xl font-black mb-6 tracking-tight text-foreground uppercase italic">{formTitle}</h1>
         
         <div className="flex flex-col items-center gap-6">
           <div className="flex items-center gap-2.5">
@@ -339,7 +340,7 @@ export default function RespondFormPage() {
       {(headerVideoUrl || headerImageUrl) && currentQuestion === 0 && (
         <div className="glass-card mb-16 overflow-hidden border border-white/5 animate-fade-in shadow-premium rounded-[40px] group/hero">
           <div className="p-6 sm:p-8 bg-white/5 border-b border-white/5 flex items-center justify-between">
-             <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white flex items-center gap-3">
+             <h2 className="text-xs font-black uppercase tracking-[0.2em] text-foreground flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"></span>
               Information
             </h2>
@@ -376,8 +377,8 @@ export default function RespondFormPage() {
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           </div>
           <div className="space-y-4">
-            <h2 className="text-2xl font-black uppercase tracking-tight text-white">Empty Horizon</h2>
-            <p className="text-sm text-slate-500 font-medium max-w-xs mx-auto">This form doesn't have any questions yet or is being initialized.</p>
+            <h2 className="text-2xl font-black uppercase tracking-tight text-foreground">Empty Horizon</h2>
+            <p className="text-sm text-slate-500 font-medium max-w-xs mx-auto">This form doesn&apos;t have any questions yet or is being initialized.</p>
           </div>
           <Link href="/" className="btn-secondary h-12 px-10 rounded-2xl text-[10px] uppercase font-black tracking-widest mt-4">Return Home</Link>
         </div>
@@ -402,7 +403,7 @@ export default function RespondFormPage() {
             <div className="space-y-10">
               {/* Text question */}
               {currentQ.text && (
-                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-[1.1] sm:leading-[1.1] text-white tracking-tight text-balance">
+                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-[1.1] sm:leading-[1.1] text-foreground tracking-tight text-balance">
                   {currentQ.text}
                 </h2>
               )}

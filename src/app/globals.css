@@ -200,7 +200,7 @@ body {
   border: 1px solid rgba(239, 68, 68, 0.2);
   color: #ef4444;
   font-weight: 600;
-  transition: all 0.4s;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -222,7 +222,7 @@ body {
   padding: 16px 20px;
   color: var(--text-primary);
   font-family: 'Outfit', sans-serif;
-  transition: all 0.4s;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 

@@ -109,16 +109,18 @@ export default function CreateFormPage() {
     );
 
     // Free transcription for owner
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognition.lang = 'en-US';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         if (transcript) {
           setQuestions(prev => prev.map(pq => pq.id === id ? { ...pq, text: transcript } : pq));
         }
       };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
@@ -194,7 +196,7 @@ export default function CreateFormPage() {
       // Update local storage
       const saved = localStorage.getItem('voiceform_my_forms');
       if (saved) {
-        const parsed = JSON.parse(saved) as any[];
+        const parsed = JSON.parse(saved) as { id: string }[];
         const updated = parsed.filter(f => f.id !== formId);
         localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
       }

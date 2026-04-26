@@ -332,7 +332,7 @@ export default function ResponsesDashboard() {
                                         Written Answer
                                       </div>
                                       <div className="text-lg sm:text-2xl leading-relaxed font-black tracking-tight text-white/90 italic">
-                                        "{answer.text}"
+                                        &quot;{answer.text}&quot;
                                       </div>
                                     </div>
                                   )}

@@ -8,9 +8,11 @@ export default function ThemeToggle() {
   useEffect(() => {
     const saved = localStorage.getItem('voiceform_theme') as 'light' | 'dark';
     if (saved) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(saved);
       document.documentElement.setAttribute('data-theme', saved);
     } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme('light');
       document.documentElement.setAttribute('data-theme', 'light');
     }
