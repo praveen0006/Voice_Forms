@@ -16,6 +16,7 @@ export interface Question {
   order_index: number;
   is_required: boolean;
   max_duration?: number;
+  is_ai_voice: boolean;
   created_at: string;
 }
 
@@ -45,4 +46,5 @@ export interface QuestionDraft {
   isRecording: boolean;
   isUploading: boolean;
   max_duration?: number;
+  is_ai_voice: boolean;
 }

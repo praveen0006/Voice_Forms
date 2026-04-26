@@ -66,6 +66,7 @@ export default function CreateFormPage() {
             isRecording: false,
             isUploading: false,
             max_duration: q.max_duration || 300,
+            is_ai_voice: q.is_ai_voice ?? false,
           }))
         );
       }
@@ -89,6 +90,7 @@ export default function CreateFormPage() {
         isRecording: false,
         isUploading: false,
         max_duration: 300,
+        is_ai_voice: false,
       },
     ]);
   }, []);
@@ -100,12 +102,25 @@ export default function CreateFormPage() {
     );
   }, []);
 
-  // Handle recording complete for a question
   const handleRecordingComplete = useCallback((id: string, blob: Blob) => {
     const url = URL.createObjectURL(blob);
     setQuestions((prev) =>
       prev.map((q) => (q.id === id ? { ...q, audioBlob: blob, audioUrl: url } : q))
     );
+
+    // Free transcription for owner
+    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript) {
+          setQuestions(prev => prev.map(pq => pq.id === id ? { ...pq, text: transcript } : pq));
+        }
+      };
+      recognition.start();
+    }
   }, []);
 
   // Remove audio from question
@@ -236,6 +251,7 @@ export default function CreateFormPage() {
           order_index: q.order_index,
           is_required: q.is_required,
           max_duration: q.max_duration || 300,
+          is_ai_voice: q.is_ai_voice,
         };
 
         if (existingIds.includes(q.id)) {
@@ -452,6 +468,20 @@ export default function CreateFormPage() {
                           className="w-3 h-3 accent-violet-500"
                         />
                         <span className="text-[10px] sm:text-xs font-bold uppercase">Required</span>
+                      </label>
+
+                      <div className="w-[1px] h-4 bg-white/10 mx-1" />
+
+                      <label className="flex items-center gap-2 px-2 cursor-pointer group/ai">
+                        <input
+                          type="checkbox"
+                          checked={q.is_ai_voice}
+                          onChange={(e) => {
+                            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...pq, is_ai_voice: e.target.checked } : pq));
+                          }}
+                          className="w-3 h-3 accent-pink-500"
+                        />
+                        <span className={`text-[10px] sm:text-xs font-bold uppercase ${q.is_ai_voice ? 'text-pink-400' : ''}`}>AI Voice</span>
                       </label>
                   </div>
 
