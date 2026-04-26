@@ -136,20 +136,31 @@ export default function RespondFormPage() {
     const currentQ = questions[currentQuestion];
     if (currentQ?.is_ai_voice && currentQ.text && !loading) {
       const speak = () => {
-        const utterance = new SpeechSynthesisUtterance(currentQ.text!);
         const voices = window.speechSynthesis.getVoices();
-        const premiumVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
+        if (voices.length === 0 && !window.speechSynthesis.onvoiceschanged) {
+          window.speechSynthesis.onvoiceschanged = speak;
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(currentQ.text!);
+        // Higher quality voice selection
+        const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || voices[0];
         if (premiumVoice) utterance.voice = premiumVoice;
-        utterance.rate = 1;
+        
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
       };
 
-      if (window.speechSynthesis.getVoices().length > 0) {
-        speak();
-      } else {
-        window.speechSynthesis.onvoiceschanged = speak;
-      }
+      // Try speaking immediately
+      speak();
+      
+      // Safety: Sometimes browsers need one more try after a tiny delay
+      const timeout = setTimeout(speak, 500);
+      return () => clearTimeout(timeout);
     }
   }, [currentQuestion, questions, loading]);
 

@@ -483,6 +483,20 @@ export default function CreateFormPage() {
                         />
                         <span className={`text-[10px] sm:text-xs font-bold uppercase ${q.is_ai_voice ? 'text-pink-400' : ''}`}>AI Voice</span>
                       </label>
+
+                      {q.text && q.is_ai_voice && (
+                        <button
+                          onClick={() => {
+                            const utterance = new SpeechSynthesisUtterance(q.text);
+                            window.speechSynthesis.cancel();
+                            window.speechSynthesis.speak(utterance);
+                          }}
+                          className="p-1.5 hover:bg-white/10 rounded-lg text-pink-400 flex items-center justify-center transition-all active:scale-90"
+                          title="Preview AI Voice"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M11 5L6 9H2V15H6L11 19V5Z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
+                        </button>
+                      )}
                   </div>
 
                   {/* Ordering */}
