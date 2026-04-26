@@ -301,11 +301,16 @@ export default function ResponsesDashboard() {
                                   <button
                                     onClick={() => {
                                       if (!answer.text) return;
+                                      const isTelugu = /[\u0C00-\u0C7F]/.test(answer.text);
                                       const utterance = new SpeechSynthesisUtterance(answer.text);
-                                      utterance.lang = 'en-US';
+                                      utterance.lang = isTelugu ? 'te-IN' : 'en-US';
+                                      
                                       // Premium feel: select a nice voice if available
                                       const voices = window.speechSynthesis.getVoices();
-                                      const premiumVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Premium'))) || voices[0];
+                                      const targetLang = isTelugu ? 'te' : 'en';
+                                      const premiumVoice = voices.find(v => v.lang.startsWith(targetLang) && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                                                         voices.find(v => v.lang.startsWith(targetLang)) || 
+                                                         voices[0];
                                       if (premiumVoice) utterance.voice = premiumVoice;
                                       
                                       utterance.rate = 0.95; // Slightly slower for clarity

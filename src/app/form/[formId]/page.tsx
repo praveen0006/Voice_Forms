@@ -142,15 +142,17 @@ export default function RespondFormPage() {
           return;
         }
 
+        const isTelugu = /[\u0C00-\u0C7F]/.test(currentQ.text!);
         const utterance = new SpeechSynthesisUtterance(currentQ.text!);
-        utterance.lang = 'te-IN'; // Force Telugu
+        utterance.lang = isTelugu ? 'te-IN' : 'en-US';
         
-        // Higher quality voice selection specifically for Telugu
-        const premiumVoice = voices.find(v => v.lang.startsWith('te') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
-                           voices.find(v => v.lang.startsWith('te')) || 
-                           voices[0];
-        
-        utterance.rate = 1.0;
+        // Dynamic voice selection based on detected language
+        const voicesList = window.speechSynthesis.getVoices();
+        const targetLang = isTelugu ? 'te' : 'en';
+        const bestVoice = voicesList.find(v => v.lang.startsWith(targetLang) && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                         voicesList.find(v => v.lang.startsWith(targetLang)) || 
+                         voicesList[0];
+        if (bestVoice) utterance.voice = bestVoice;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
 
@@ -456,13 +458,16 @@ export default function RespondFormPage() {
                         alert("Cannot play AI Voice: No text found for this question. Please add text in the form builder.");
                         return;
                       }
+                      const isTelugu = /[\u0C00-\u0C7F]/.test(currentQ.text);
                       const utterance = new SpeechSynthesisUtterance(currentQ.text);
-                      utterance.lang = 'te-IN'; // Forced Telugu
+                      utterance.lang = isTelugu ? 'te-IN' : 'en-US';
+                      
                       const voices = window.speechSynthesis.getVoices();
-                      const teluguVoice = voices.find(v => v.lang.startsWith('te')) || 
-                                         voices.find(v => v.lang.startsWith('hi')) || 
-                                         voices[0];
-                      if (teluguVoice) utterance.voice = teluguVoice;
+                      const targetLang = isTelugu ? 'te' : 'en';
+                      const bestVoice = voices.find(v => v.lang.startsWith(targetLang) && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural'))) || 
+                                       voices.find(v => v.lang.startsWith(targetLang)) || 
+                                       voices[0];
+                      if (bestVoice) utterance.voice = bestVoice;
                       
                       console.log("Attempting manual AI speech for:", currentQ.text);
                       window.speechSynthesis.cancel();
