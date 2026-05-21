@@ -81,12 +81,12 @@ export default function RootLayout({
 
             <nav className="flex items-center gap-4 sm:gap-6">
               <ThemeToggle />
-              <Link
+              <a
                 href="https://nexeraeco.vercel.app/" target="_blank" rel="noopener noreferrer"
                 className="hidden md:inline-flex px-6 py-2.5 bg-white/5 rounded-full border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-cyan-400 transition-all shadow-xl active:scale-95"
               >
                 Cyber-Link v2.0
-              </Link>
+              </a>
             </nav>
           </div>
         </header>
