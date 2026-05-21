@@ -290,7 +290,7 @@ export default function RespondFormPage() {
               Want to see what else we do?
             </p>
             <a 
-              href="https://nexera.io" 
+              href="https://nexeraeco.vercel.app/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn-secondary w-full"
