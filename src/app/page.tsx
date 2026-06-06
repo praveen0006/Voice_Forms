@@ -17,14 +17,32 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [recentForms, setRecentForms] = useState<SavedForm[]>([]);
+  const [loadingForms, setLoadingForms] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem('voiceform_my_forms');
-    if (saved) {
+    async function loadForms() {
+      setLoadingForms(true);
       try {
-        setRecentForms(JSON.parse(saved));
-      } catch { }
+        const { data, error } = await supabase
+          .from('forms')
+          .select('id, title, created_at')
+          .order('created_at', { ascending: false })
+          .limit(20);
+        if (!error && data) {
+          setRecentForms(data);
+        }
+      } catch (e) {
+        console.error('Failed to load forms:', e);
+        // fallback: try localStorage
+        const saved = localStorage.getItem('voiceform_my_forms');
+        if (saved) {
+          try { setRecentForms(JSON.parse(saved)); } catch { }
+        }
+      } finally {
+        setLoadingForms(false);
+      }
     }
+    loadForms();
   }, []);
 
   const handleCreate = async () => {
@@ -43,6 +61,8 @@ export default function Home() {
 
       const newForm = { id: data.id, title: data.title, created_at: data.created_at };
       const updatedForms = [newForm, ...recentForms];
+      setRecentForms(updatedForms);
+      // Also keep localStorage as backup cache
       localStorage.setItem('voiceform_my_forms', JSON.stringify(updatedForms));
 
       router.push(`/create/${data.id}`);
@@ -62,7 +82,7 @@ export default function Home() {
 
       const updated = recentForms.filter(f => f.id !== id);
       setRecentForms(updated);
-      localStorage.setItem('voiceform_my_forms', JSON.stringify(updated));
+      localStorage.setItem('voiceform_my_forms', JSON.stringify(updated)); // update cache too
     } catch (e) {
       console.error('Delete error:', e);
       alert('Failed to delete form');
@@ -140,7 +160,11 @@ export default function Home() {
         </div>
 
         {/* Recent Projects List */}
-        {recentForms.length > 0 && (
+        {loadingForms ? (
+          <div className="animate-fade-in w-full pb-32 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600 animate-pulse">Loading Forms...</p>
+          </div>
+        ) : recentForms.length > 0 && (
           <div className="animate-fade-in w-full pb-32">
             <div className="flex items-center justify-between mb-10 px-4">
                <h2 className="text-2xl font-black tracking-tighter text-primary uppercase italic">
